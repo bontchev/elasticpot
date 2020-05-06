@@ -1,0 +1,37 @@
+{
+    "nodes": {
+        "x1JG6g9PRHy6ClCOO2-C4g": {
+            "os": {
+                "refresh_interval_in_millis": 1000,
+                "available_processors": 12,
+                "cpu": {
+                    "total_cores": 24,
+                    "total_sockets": 48,
+                    "cores_per_socket": 2
+                }
+            },
+            "process": {
+                "refresh_interval_in_millis": 1000,
+                "id": 12345,
+                "max_file_descriptors": 65535,
+                "mlockall": false
+            },
+            "jvm": {
+                "version": "1.7.0_65"
+            },
+            "network": {
+                "refresh_interval_in_millis": 5000,
+                "primary_interface": {
+                    "name": "eth0"
+                }
+            },
+            "transport": {
+                "bound_address": "inet[/0:0:0:0:0:0:0:0:9300]"
+            },
+            "http": {
+                "bound_address": "inet[/0:0:0:0:0:0:0:0:9200]",
+                "max_content_length_in_bytes": 104857600
+            }
+        }
+    }
+}

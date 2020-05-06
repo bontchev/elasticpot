@@ -1,0 +1,81 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.pyc
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.py~
+*~
+
+# Pycharm project settings
+.idea
+
+.project
+.pyproject
+
+# Visual Studio Code project
+.vscode/
+
+# DataBase files
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+
+# dotenv
+.env
+
+# virtualenv
+.venv
+venv/
+ENV/
+adbh_env/
+*_env/
+*-env/
+
+# Log files
+log/
+*.log
+
+# Config files
+*.cfg
+
+# Output files
+*.out
+*.raw
+
+# Download files
+dl/
+downloads/
+
+# Geolocation data
+*.mmdb
+.geoipupdate.lock
+
+# Logrotate
+logrotate.*
+
+# PID
+*.pid
+*.swp
+
+*.rnd

@@ -1,0 +1,12 @@
+{
+    "health": "yellow",
+    "status": "open",
+    "index": "1cf0aa9d61f185b59f643939f862c01f89b21360",
+    "uuid": "d_g1c8IASCGdhuFwcEh5WA",
+    "pri": "1",
+    "rep": "1",
+    "docs.count": "30",
+    "docs.deleted": "0",
+    "store.size": "13416",
+    "pri.store.size": "13416"
+}

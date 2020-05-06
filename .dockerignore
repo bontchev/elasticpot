@@ -1,0 +1,10 @@
+**/*.pyc
+**/*.md
+**/*.pid
+**/.*
+Dockerfile
+bin/
+docs/
+log/*
+*-env/
+

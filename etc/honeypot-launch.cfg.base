@@ -1,0 +1,3 @@
+# To override the default virtual enviroment, either set HONEYPOT_VIRTUAL_ENV or
+# activate it before starting the honeypot
+HONEYPOT_VIRTUAL_ENV=elasticpot-env

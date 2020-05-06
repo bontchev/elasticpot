@@ -1,0 +1,149 @@
+#!/bin/bash
+
+honeypot_directory() {
+    if [[ "$0" = /* ]]
+    then
+        HONEYPOTDIR=$(dirname "$0")/..
+    else
+        HONEYPOTDIR=$(dirname "$PWD"/"$0")/..
+    fi
+    HONEYPOTDIR=$(if cd "${HONEYPOTDIR}"; then pwd -P 2>/dev/null; else pwd; fi)
+}
+
+config_read_file() {
+    (grep -E "^${2}=" -m 1 "${1}" 2>/dev/null || echo "VAR=__UNDEFINED__") | head -n 1 | cut -d '=' -f 2-;
+}
+
+config_get() {
+    val="$(config_read_file "${config_file_name}" "${1}")";
+    if [ "${val}" = "__UNDEFINED__" ]; then
+        val="$(config_read_file "${config_file_name}.base" "${1}")";
+    fi
+    printf -- "%s" "${val}";
+}
+
+activate_venv() {
+    # Activate Python virtual environment
+    VENV="$1"
+    if [ ! -f "$VENV/bin/activate" ]
+    then
+        return 1
+    fi
+    source "$VENV/bin/activate"
+    return 0
+}
+
+honeypot_status() {
+    # Print status
+    PID=$(cat "${PIDFILE}" 2>/dev/null || echo "")
+    if [ -n "$PID" ]; then
+        if ps -p "$PID" >/dev/null 2>&1; then
+            echo "The honeypot is running (PID: ${PID})."
+        else
+            echo "The honepot is not running (PID: ${PID})."
+            echo "Removing stale PID file"
+            rm -f "${PIDFILE}"
+        fi
+    else
+        echo "The honeypot is not running."
+    fi
+}
+
+honeypot_start() {
+    # Start the honeypot
+    honeypot_status
+    PID=$(cat "${PIDFILE}" 2>/dev/null || echo -n "")
+
+    if [ ! -z "$VIRTUAL_ENV" ]
+    then
+        echo 2>&1 "Using activated Python virtual environment \"$VIRTUAL_ENV\""
+    elif activate_venv "$HONEYPOT_VIRTUAL_ENV"
+    then
+        echo 2>&1 "Using custom Python virtual environment \"$HONEYPOT_VIRTUAL_ENV\""
+    elif activate_venv "$DEFAULT_VIRTUAL_ENV"
+    then
+        echo 2>&1 "Using default Python virtual environment \"$DEFAULT_VIRTUAL_ENV\""
+    else
+        echo 2>&1 "Not using Python virtual environment"
+    fi
+
+    if [ -z "$PID" ]; then
+        echo "Starting the honeypot ..."
+        nohup python "${HONEYPOTDIR}/elasticpot.py" &>/dev/null & echo $! >"${HONEYPOTDIR}/${PIDFILE}"
+        echo 2>&1 "The honeypot was started successfully."
+    fi
+}
+
+honeypot_stop() {
+    # Stop the honeypot
+    PID=$(cat "${PIDFILE}" 2>/dev/null || echo -n "")
+    if [ -n "$PID" ]; then
+        echo -n "Stopping the honeypot..."
+        if kill -TERM "$PID"; then
+            ((t = 60))
+            while ((t > 1)); do
+                sleep 1
+                if kill -0 "$PID" >/dev/null 2>&1; then
+                    ((t -= 1))
+                else
+                    echo "terminated."
+                    rm -f "${PIDFILE}"
+                    return
+                fi
+            done
+            kill -KILL "$PID"
+            echo "killed."
+        else
+            echo -e "\nRemoving stale PID file"
+            rm -f "${PIDFILE}"
+        fi
+    else
+        echo "The honeypot is not running."
+    fi
+}
+
+honeypot_usage() {
+    echo "usage: $0 <start|stop|restart|status>"
+}
+
+################################################################################
+## Main script
+################################################################################
+
+if [ "$#" = 0 ]
+then
+    honeypot_usage
+    exit 1
+fi
+
+honeypot_directory "$0"
+config_dir=${HONEYPOTDIR}/etc
+config_file_name=${config_dir}/honeypot-launch.cfg
+
+HONEYPOT_VIRTUAL_ENV="$(config_get HONEYPOT_VIRTUAL_ENV)";
+
+cd "${HONEYPOTDIR}"
+PIDFILE=honeypot.pid
+set -e
+
+key=$1
+shift 1
+case $key in
+    stop)
+        honeypot_stop "$*"
+        ;;
+    start)
+        honeypot_start "$*"
+        ;;
+    restart)
+        honeypot_stop "$*"
+        honeypot_start "$*"
+        ;;
+    status)
+        honeypot_status "$*"
+        ;;
+    *)
+        honeypot_usage
+        exit 1
+        ;;
+esac
