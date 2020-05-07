@@ -78,8 +78,8 @@ log_path = log
 
 # Log file name
 #
-# (default: honeypot.log)
-#log_filename = honeypot.log
+# (default: stdout)
+#log_filename =
 
 # ============================================================================
 # Network Specific Options
