@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Log rotation
 * Emulation of multiple Elasticsearch requests
 * Data-driven responses stored in files
+* Make the script compatible with Python 3.x
 * Rewrote the documentation
 
 ### Changed
