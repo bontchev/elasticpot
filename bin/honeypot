@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 honeypot_directory() {
     if [[ "$0" = /* ]]
