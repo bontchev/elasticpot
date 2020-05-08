@@ -10,8 +10,12 @@ from twisted.web.resource import Resource
 
 try:
     from urllib.parse import unquote
+    def decode(x):
+        return x.decode()
 except ImportError:
     from urlparse import unquote
+    def decode(x):
+        return x
 
 
 class Index(Resource):
@@ -37,10 +41,10 @@ class Index(Resource):
         self.cfg = options
 
     def render_HEAD(self, request):
-        path = unquote(request.uri.decode('utf-8'))
+        path = unquote(decode(request.uri))
         collapsed_path = tools.resolve_url(path)
 
-        tools.logger(request, 'INFO', '{}: {}'.format(request.method.decode('utf-8'), path))
+        tools.logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
 
         event = {
             'eventid': 'elasticpot.recon',
@@ -53,11 +57,11 @@ class Index(Resource):
         return self.send_response(request)
 
     def render_GET(self, request):
-        path = unquote(request.uri.decode('utf-8'))
+        path = unquote(decode(request.uri))
         collapsed_path = tools.resolve_url(path)
         url_path = list(filter(None, collapsed_path.split('/')))
 
-        tools.logger(request, 'INFO', '{}: {}'.format(request.method.decode('utf-8'), path))
+        tools.logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
 
         event = {
             'eventid': 'elasticpot.recon',
@@ -122,16 +126,16 @@ class Index(Resource):
             return self.fake_error(request, url_path[0])
 
     def render_POST(self, request):
-        path = unquote(request.uri.decode('utf-8'))
+        path = unquote(decode(request.uri))
 
-        tools.logger(request, 'INFO', '{}: {}'.format(request.method.decode('utf-8'), path))
+        tools.logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
 
         if request.getHeader('Content-Length'):
             collapsed_path = tools.resolve_url(path)
             content_length = int(request.getHeader('Content-Length'))
             if content_length > 0:
-                post_data = request.content.read().decode('utf-8')
-                tools.logger(request, 'INFO', 'POST body: {}'.format(post_data))
+                post_data = request.content.read()
+                tools.logger(request, 'INFO', 'POST body: {}'.format(decode(post_data)))
                 event = {
                     'eventid': 'elasticpot.attack',
                     'message': 'Exploit',
@@ -182,7 +186,7 @@ class Index(Resource):
         return self.send_response(request, page)
 
     def fake_nodes(self, request):
-        public_ip = self.cfg['public_ip']
+        public_ip = decode(self.cfg['public_ip'])
         node_name = 'x1JG6g9PRHy6ClCOO2-C4g'
         response = self.get_json('nodes.json')
         response['cluster_name'] = self.cfg['cluster_name']
@@ -252,7 +256,7 @@ class Index(Resource):
         event['dst_ip'] = local_ip
         event['dst_port'] = self.cfg['port']
         event['sensor'] = self.cfg['sensor']
-        event['request'] = request.method.decode('utf-8')
+        event['request'] = decode(request.method)
         user_agent = request.getHeader('User-Agent')
         if user_agent:
             event['user_agent'] = user_agent

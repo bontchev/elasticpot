@@ -6,10 +6,19 @@ import core.output
 from core.config import CONFIG
 
 from hashlib import sha256
+from sys import version_info
 from geoip2.database import Reader
 
 from twisted.python import log
 from twisted.enterprise.adbapi import ConnectionPool
+
+
+if version_info[0] < 3:
+    def decode(x):
+        return x
+else:
+    def decode(x):
+        return x.decode()
 
 
 class ReconnectingConnectionPool(ConnectionPool):
@@ -158,12 +167,15 @@ class Output(core.output.Output):
             city = response_city.city.name
             if city is None:
                 city = ''
+            else:
+                city = decode(city.encode('utf-8'))
             country = response_city.country.name
             if country is None:
                 country = ''
                 country_code = ''
             else:
-                country_code = response_city.country.iso_code
+                country = decode(country.encode('utf-8'))
+                country_code = decode(response_city.country.iso_code.encode('utf-8'))
         except Exception as e:
             self.local_log(e)
             city = ''
@@ -172,10 +184,10 @@ class Output(core.output.Output):
 
         try:
             response_asn = self.reader_asn.asn(remote_ip)
-            if response_asn.autonomous_system_organization is not None:
-                org = response_asn.autonomous_system_organization.encode('utf8')
-            else:
+            if response_asn.autonomous_system_organization is None:
                 org = ''
+            else:
+                org = decode(response_asn.autonomous_system_organization.encode('utf-8'))
 
             if response_asn.autonomous_system_number is not None:
                 asn_num = response_asn.autonomous_system_number
@@ -215,7 +227,7 @@ class Output(core.output.Output):
                 `timestamp`, `ip`, `remote_port`, `request`, `url`,
                 `payload`, `message`, `user_agent`, `content_type`,
                 `accept_language`, `local_host`, `local_port`, `sensor`)
-            VALUES (FROM_UNIXTIME(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (FROM_UNIXTIME(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (event['unixtime'], remote_ip, event['src_port'], event['request'], path_id, payload_id,
             message_id, agent_id, content_id, language_id, event['dst_ip'], event['dst_port'], sensor_id, ))
