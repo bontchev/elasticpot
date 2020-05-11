@@ -89,10 +89,11 @@ class Index(Resource):
         elif url_path[0].startswith('favicon.'):
             # /favicon.ico
             return self.send_response(request)
-        elif '_alias' in url_path or '_aliases' in url_path:
+        elif 'alias' in url_path:
             # /%2A/_alias
             # /_aliases
             # /_aliases?pretty
+            # /_cat/aliases?format=json&h=alias
             return self.fake_alias(request)
         elif len(url_path) >= 2:
             if url_path[0] == '_cat' and url_path[1].startswith('indices'):
@@ -119,10 +120,22 @@ class Index(Resource):
                     return self.fake_error(request, url_path[0])
             else:
                 return self.fake_error(request, url_path[0])
+            # Not handled:
+            # /stalker_portal/c/
+            # /streaming/clients_live.php
+            # /streaming/QxAvEzlK.php
+            # These should return
+            # {"error": "Incorrect HTTP method for uri [{path}] and method [GET], allowed: [POST]","status": 405}
         else:
             # /c
             # /stat
             # /nice%20ports,/Trinity.txt.bak
+            # /api.php
+            # /login.php
+            # /system_api.php
+            # /client_area/
+            # /stalker_portal/c/version.js
+            # /streaming
             return self.fake_error(request, url_path[0])
 
     def render_POST(self, request):
@@ -145,7 +158,11 @@ class Index(Resource):
 
                 self.report_event(request, event)
 
-                if collapsed_path.startswith('/_search'):
+                # /_search?pretty
+                # /_search?source
+                # /1cf0aa9d61f185b59f643939f862c01f89b21360/_search
+                # /db18744ea5570fa9bf868df44fecd4b58332ff24/_search
+                if '/_search' in collapsed_path:
                     return self.fake_search(request)
 
         # send empty response as we're now done
