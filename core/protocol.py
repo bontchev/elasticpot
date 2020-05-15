@@ -85,6 +85,7 @@ class Index(Resource):
             return self.fake_search(request)
         elif url_path[0] == '_stats':
             # /_stats
+            # /_stats/indexing
             return self.fake_stats1(request)
         elif url_path[0].startswith('favicon.'):
             # /favicon.ico
@@ -93,6 +94,7 @@ class Index(Resource):
             # /%2A/_alias
             # /_aliases
             # /_aliases?pretty
+            # /_aliases?pretty=true
             # /_cat/aliases?format=json&h=alias
             return self.fake_alias(request)
         elif len(url_path) >= 2:
@@ -100,6 +102,7 @@ class Index(Resource):
                 # /_cat/indices
                 # /_cat/indices?pretty
                 # /_cat/indices?v
+                # /_cat/indices?format=json
                 # /_cat/indices?format=json&h=index
                 # /_cat/indices?bytes=b&format=json
                 has_header = 'v' in url_path[1]
