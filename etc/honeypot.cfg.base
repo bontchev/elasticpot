@@ -19,7 +19,7 @@
 # If not specified, the logging modules will instead use the IP address of the
 # server as the sensor name.
 #
-# (default: not specified)
+# (default: the name of the local machine)
 #sensor_name = myhostname
 
 # The version of Elasticsearch reported by the honeypot.
@@ -80,6 +80,11 @@ log_path = log
 #
 # (default: stdout)
 #log_filename =
+
+# Directory containing the response files
+#
+# (default: responses)
+#responses_dir = responses
 
 # ============================================================================
 # Network Specific Options
