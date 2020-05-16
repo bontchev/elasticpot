@@ -20,7 +20,7 @@ from twisted.python import log
 from twisted.web.server import Site
 from twisted.internet import reactor
 
-__VERSION__ = '1.0.0'
+__VERSION__ = '1.0.1'
 __description__ = 'Elasticsearch Honeypot'
 __license__ = 'GPL'
 __uri__ = 'https://gitlab.com/bontchev/elasticpot'
@@ -36,6 +36,8 @@ def get_options(cfg_options):
                         help='Port to listen on (default: {})'.format(cfg_options['port']))
     parser.add_argument('-l', '--logfile', type=str, default=cfg_options['logfile'],
                         help='Log file (default: stdout)')
+    parser.add_argument('-r', '--responses', type=str, default=cfg_options['responses_dir'],
+                        help='Directory of the response files (default: {})'.format(cfg_options['responses_dir']))
     parser.add_argument('-s', '--sensor', type=str, default=cfg_options['sensor'],
                         help='Sensor name (default: {})'.format(cfg_options['sensor']))
 
@@ -66,6 +68,7 @@ def set_options():
     cfg_options['spoofed_version'] = CONFIG.get('honeypot', 'spoofed_version', fallback='1.4.1')
     cfg_options['instance_name'] = CONFIG.get('honeypot', 'instance_name', fallback='Green Goblin')
     cfg_options['public_ip_url'] = CONFIG.get('honeypot', 'public_ip_url', fallback='https://ident.me')
+    cfg_options['responses_dir'] = CONFIG.get('honeypot', 'responses_dir', fallback='responses')
 
     args = get_options(cfg_options)
 
