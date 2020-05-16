@@ -8,8 +8,9 @@
   - [Step 5: Setup Virtual Environment](#step-5-setup-virtual-environment)
   - [Step 6: Create a configuration file](#step-6-create-a-configuration-file)
   - [Step 7: Start the honeypot](#step-7-start-the-honeypot)
-  - [Configure Additional Output Plugins (OPTIONAL)](#configure-additional-output-plugins-optional)
-  - [Docker Usage (Optional)](#docker-usage-optional)
+  - [Configure additional output plugins (OPTIONAL)](#configure-additional-output-plugins-optional)
+  - [Change the default responses (OPTIONAL)](#change-the-default-responses-optional)
+  - [Docker usage (OPTIONAL)](#docker-usage-optional)
   - [Command-line options](#command-line-options)
   - [Upgrading the honeypot](#upgrading-the-honeypot)
 
@@ -151,7 +152,7 @@ Starting the honeypot ...
 The honeypot was started successfully.
 ```
 
-## Configure Additional Output Plugins (OPTIONAL)
+## Configure additional output plugins (OPTIONAL)
 
 The honeypot automatically outputs event data as text to the file
 `log/honeypot.log`. Additional output plugins can be configured to record the
@@ -164,7 +165,51 @@ More plugins are likely to be added in the future.
 
 See `docs/[Output Plugin]/README.md` for details.
 
-## Docker Usage (Optional)
+## Change the default responses (OPTIONAL)
+
+By default, the honeypot sends as responses to the various queries that it
+emulates the contents of the files in the `responses` directory. However,
+this can be used to fingerprint the honeypot, so the user is *strongly*
+encouraged to change their contents.
+
+In other to prevent future updates of the honeypot from overwriting the
+changes of these files made by the user, one should store the custom
+responses in a separate directory and specify this directory either
+in the `responses_dir=` directive of the `etc/honeypot.cfg` file or
+via the `-r` command-line option.
+
+The meaning of these response files is as follows:
+
+File | Send as a response to the query
+--- | ---
+`aliases.json` | Anything containing `alias`
+`banner.json` | `/`
+`cluster.json` | Anythinig starting with `/_cluster/health`
+`error.json` | Any unrecognized query
+`index1long.json`, `index2long.json` | A `/_cat/indices` query that doesn't contain the parameter `h=index`
+`index1short.json`, `index2short.json` | A `/_cat/indices` query that contains the parameter `h=index`
+`indices.txt` | A `/_cat/indices` query that doesn't contain the parameter `format=json`
+`nodes.json` | Anything starting with `/_nodes`
+`pluginhead.html` | `/_plugin/head`
+`search.json` | Anything starting with `/_search`
+`stats1.json` | Anything starting with `/_stats`
+`stats2.json` | `/_cluster/stats`
+
+It is advisable to leave the file `banner.json` unchanged, because it
+identifies the simulated Elasticsearch server as being an old version, which
+is vulnerable to remote code execution, thus enticing the attackers to attempt
+to exploit it.
+
+Similarly, there is normally no need to modify the file `error.json`.
+
+The honeypot currently emulates an Elasticsearch database with 2 indices
+(`index1*.json` and `index2*.json`). Their contents and names can be changed
+via the response files but their number cannot be. It is advisable that the
+contents of the files `aliases.json` and `indices.txt` reflects the names
+of these two indices, if they are modified by the user (the latter is
+advisable, in order to avoid fingerprinting).
+
+## Docker usage (OPTIONAL)
 
 First, from a user who can `sudo` (i.e., not from the user `elasticpot`) make
 sure that `docker` is installed and that the user `elasticpot` is a member of
@@ -203,8 +248,10 @@ elasticpot supports the following command-line options:
   -p PORT, --port PORT  Port to listen on (default: 9200)
   -l LOGFILE, --logfile LOGFILE
                         Log file (default: stdout)
+  -r RESPONSES, --responses RESPONSES
+                        Directory of the response files (default: responses)
   -s SENSOR, --sensor SENSOR
-                        Sensor name (default: bontchev-PC)
+                        Sensor name (default: computer-name)
 ```
 
 The settings specified via command-line options take precedence over the
