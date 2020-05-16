@@ -1,4 +1,5 @@
 
+from os import sep
 from time import time
 from random import randint
 from json import dumps, load
@@ -90,7 +91,7 @@ class Index(Resource):
         elif url_path[0].startswith('favicon.'):
             # /favicon.ico
             return self.send_response(request)
-        elif 'alias' in url_path:
+        elif 'alias' in collapsed_path:
             # /%2A/_alias
             # /_aliases
             # /_aliases?pretty
@@ -292,7 +293,7 @@ class Index(Resource):
         if page not in self.page_cache:
             return {}
         if self.page_cache[page] == '':
-            with open('responses/{}'.format(page), 'r') as f:
+            with open('{}{}{}'.format(self.cfg['responses_dir'], sep, page), 'r') as f:
                 self.page_cache[page] = load(f)
         return self.page_cache[page]
 
@@ -305,7 +306,7 @@ class Index(Resource):
             if page.endswith('.json'):
                 self.page_cache[page] = dumps(self.get_json(page), separators=(',', ':'))
             else:
-                with open('responses/{}'.format(page), 'r') as f:
+                with open('{}{}{}'.format(self.cfg['responses_dir'], sep, page), 'r') as f:
                     self.page_cache[page] = f.read()
         return self.page_cache[page]
 
