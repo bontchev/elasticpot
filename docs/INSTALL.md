@@ -264,6 +264,8 @@ dependencies and restart the honeypot:
 ```bash
 ./bin/honeypot stop
 git pull
+source ./elasticpot-env/bin/activate
 pip install --upgrade -r requirements.txt
+deactivate
 ./bin/honeypot start
 ```
