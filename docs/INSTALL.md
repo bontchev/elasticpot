@@ -19,11 +19,9 @@
 First we install system-wide support for Python virtual environments and other
 dependencies. Actual Python packages are installed later.
 
-For a Python2-based environment:
-
 ```bash
 sudo apt-get update
-sudo apt-get install git python-virtualenv libffi-dev build-essential libpython-dev python2.7-minimal python-dev libmysqlclient-dev
+sudo apt-get install git python-virtualenv libffi-dev build-essential libpython-dev python2.7-minimal python3.5-minimal python-dev libmysqlclient-dev
 ```
 
 ## Step 2: Open the firewall for port 9200 traffic
