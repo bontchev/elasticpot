@@ -2,7 +2,7 @@
 from json import dump
 from errno import EEXIST
 from copy import deepcopy
-from os import sep, makedirs, linesep
+from os import makedirs, linesep
 from os.path import dirname, basename, exists
 
 from core import output
@@ -16,12 +16,8 @@ class Output(output.Output):
         fn = CONFIG.get('output_jsonlog', 'logfile')
         dirs = dirname(fn)
         base = basename(fn)
-        if not exists(dirs) and sep in fn:
-            try:
-                makedirs(dirs)
-            except OSError as exc:
-                if exc.errno != EEXIST:
-                    raise
+        if not exists(dirs):
+            makedirs(dirs)
         self.outfile = HoneypotDailyLogFile(base, dirs, defaultMode=0o664)
 
     def stop(self):
