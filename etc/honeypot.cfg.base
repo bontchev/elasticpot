@@ -121,7 +121,7 @@ log_path = log
 # JSON based logging module
 #
 #[output_jsonlog]
-#enabled = true
+#enabled = false
 #logfile = log/honeypot.json
 #epoch_timestamp = true
 
@@ -145,6 +145,13 @@ log_path = log
 #geoip_citydb = data/GeoLite2-City.mmdb
 #geoip_asndb = data/GeoLite2-ASN.mmdb
 
+# Text output
+# This writes audit log entries to a text file
+#
+#[output_textlog]
+#enabled = false
+#logfile = log/elasticpot.txt
+
 # TODO:
 
 # Supports logging to Elasticsearch
@@ -156,17 +163,6 @@ log_path = log
 #index = honeypot
 #type = honeypot
 #pipeline = geoip
-
-# Text output
-# This writes audit log entries to a text file
-#
-# Format can be:
-# text, cef
-#
-#[output_textlog]
-#enabled = false
-#logfile = logs/audit.log
-#format = text
 
 # SQLite3 logging module
 #
