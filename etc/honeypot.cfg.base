@@ -71,7 +71,7 @@
 #mac_address = 08:01:c7:3F:15:DD
 
 # Directory where to save log files in.
-# Log files are named honeypot.log.YYYY-MM-DD in that directory
+# Log files are <log_filename>.YYYY-MM-DD in that directory
 #
 # (default: log)
 log_path = log
@@ -122,7 +122,7 @@ log_path = log
 #
 #[output_jsonlog]
 #enabled = false
-#logfile = log/honeypot.json
+#logfile = log/elasticpot.json
 #epoch_timestamp = true
 
 # MySQL logging module
@@ -134,8 +134,8 @@ log_path = log
 #[output_mysql]
 #enabled = false
 #host = localhost
-#database = honeypot
-#username = honeypot
+#database = elasticpot
+#username = elasticpot
 #password = secret
 #port = 3306
 #debug = false
@@ -152,6 +152,18 @@ log_path = log
 #enabled = false
 #logfile = log/elasticpot.txt
 
+# HPFeeds
+#
+# Note the lack of "s" at the end:
+[output_hpfeed]
+enabled = false
+#server = hpfeeds.mysite.org
+#tlscert = /path/to/tls/cert/file
+#port = 10000
+#identifier = abc123
+#secret = secret
+#channel = elasticpot
+
 # TODO:
 
 # Supports logging to Elasticsearch
@@ -160,9 +172,43 @@ log_path = log
 #enabled = false
 #host = localhost
 #port = 9200
-#index = honeypot
-#type = honeypot
+#index = elasticpot
+#
+# type has been deprecated since ES 6.0.0
+# use _doc which is the default type. See
+# https://stackoverflow.com/a/53688626 for
+# more information
+#
+#type = _doc
+#
+# set pipeline = geoip to map src_ip to
+# geo location data. You can use a custom
+# pipeline but you must ensure it exists
+# in elasticsearch.
+#
 #pipeline = geoip
+#
+# Authentication. When x-pack.security is enabled
+# in ES, default users have been created and requests
+# must be authenticated.
+#
+# Credentials
+#
+#username = elasticpot
+#password = 
+#
+# TLS encryption. Communications between the client (elasticpot) 
+# and the ES server should naturally be protected by encryption
+# if requests are authenticated (to prevent from man-in-the-middle 
+# attacks). The following options are then paramount
+# if username and password are provided.
+#
+# use ssl/tls
+#ssl = true
+# Path to trusted CA certs on disk
+#ca_certs = /path/to/cert/file/elastic_ca.crt
+# verify SSL certificates
+#verify_certs = true
 
 # SQLite3 logging module
 #
@@ -172,15 +218,51 @@ log_path = log
 #
 #[output_sqlite]
 #enabled = false
-#db_file = honeypot.db
+#db_file = elasticpot.db
 
-# HPFeeds
+# Rethinkdb output module
+# Rethinkdb output module requires extra Python module: pip install rethinkdb
 #
-#[output_hpfeeds]
+#[output_rethinkdblog]
 #enabled = false
-#server = hpfeeds.mysite.org
-#port = 10000
-#identifier = abc123
-#secret = secret
-#debug=false
+#host = 127.0.0.1
+#port = 28015
+#table = output
+#password =
+#db = elasticpot
 
+# MongoDB logging module
+#
+# MongoDB logging requires an extra Python module: pip install pymongo
+#
+#[output_mongodb]
+#enabled = false
+#connection_string = mongodb://username:password@host:port/database
+#database = elasticpot
+
+#[output_influx]
+#enabled = false
+#host = 127.0.0.1
+#port = 8086
+#database_name = elasticpot
+#retention_policy_duration = 12w
+
+#[output_kafka]
+#enabled = false
+#host = 127.0.0.1
+#port = 9092
+#topic = elasticpot
+
+#[output_redis]
+#enabled = false
+#host = 127.0.0.1
+#port = 6379
+# DB of the redis server. Defaults to 0
+#db = 0
+# Password of the redis server. Defaults to None
+#password = secret
+# Name of the list to push to or the channel to publish to. Required
+#keyname = elasticpot
+# Method to use when sending data to redis.
+# Can be one of [lpush, rpush, publish]. Defaults to lpush
+#send_method = lpush

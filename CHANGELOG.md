@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2]
 
-### Added in version 1.0.1
+### Added in version 1.0.2
 
 * Text output plugin
+* HPFeeds output plugin
 
 ## [1.0.1]
 
