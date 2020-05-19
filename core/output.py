@@ -13,10 +13,10 @@ class Output(object):
 
         self.cfg = general_options
 
-        if not 'sensor' in self.cfg:
-            self.sensor = CONFIG.get('honeypot', 'sensor_name', fallback=gethostname())
-        else:
+        if 'sensor' in self.cfg:
             self.sensor = self.cfg['sensor']
+        else:
+            self.sensor = CONFIG.get('honeypot', 'sensor_name', fallback=gethostname())
 
         self.start()
 

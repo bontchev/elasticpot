@@ -1,11 +1,11 @@
 
 from json import dump
-from errno import EEXIST
 from copy import deepcopy
 from os import makedirs, linesep
-from os.path import dirname, basename, exists
+from os.path import dirname, basename
 
 from core import output
+from core.tools import mkdir
 from core.config import CONFIG
 from core.logfile import HoneypotDailyLogFile
 
@@ -16,8 +16,7 @@ class Output(output.Output):
         fn = CONFIG.get('output_jsonlog', 'logfile')
         dirs = dirname(fn)
         base = basename(fn)
-        if not exists(dirs):
-            makedirs(dirs)
+        mkdir(dirs)
         self.outfile = HoneypotDailyLogFile(base, dirs, defaultMode=0o664)
 
     def stop(self):

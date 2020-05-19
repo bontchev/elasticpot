@@ -72,13 +72,9 @@ def write_event(event, cfg):
 def mkdir(dir_path):
     if not dir_path:
         return
-    try:
-        makedirs(dir_path)
-    except OSError as exc:
-        if exc.errno == EEXIST and path.isdir(dir_path):
-            pass
-        else:
-            raise
+    if path.exists(dir_path) and path.isdir(dir_path):
+        return
+    makedirs(dir_path)
 
 
 def import_plugins(cfg):
