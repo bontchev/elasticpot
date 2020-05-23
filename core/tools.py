@@ -1,5 +1,4 @@
 
-from errno import EEXIST
 from sys import version_info
 from os import makedirs, path
 from datetime import datetime
