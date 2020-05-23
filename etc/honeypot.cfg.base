@@ -168,7 +168,7 @@ enabled = false
 
 # Supports logging to Elasticsearch
 #
-#[output_elasticsearch]
+#[output_elasticlog]
 #enabled = false
 #host = localhost
 #port = 9200
@@ -210,36 +210,8 @@ enabled = false
 # verify SSL certificates
 #verify_certs = true
 
-# SQLite3 logging module
+# InfluxDB logging module
 #
-# Logging to SQLite3 database. To init the database, use the script
-# docs/sql/sqlite3.sql:
-#     sqlite3 <db_file> < docs/sql/sqlite3.sql
-#
-#[output_sqlite]
-#enabled = false
-#db_file = elasticpot.db
-
-# Rethinkdb output module
-# Rethinkdb output module requires extra Python module: pip install rethinkdb
-#
-#[output_rethinkdblog]
-#enabled = false
-#host = 127.0.0.1
-#port = 28015
-#table = output
-#password =
-#db = elasticpot
-
-# MongoDB logging module
-#
-# MongoDB logging requires an extra Python module: pip install pymongo
-#
-#[output_mongodb]
-#enabled = false
-#connection_string = mongodb://username:password@host:port/database
-#database = elasticpot
-
 #[output_influx]
 #enabled = false
 #host = 127.0.0.1
@@ -247,13 +219,28 @@ enabled = false
 #database_name = elasticpot
 #retention_policy_duration = 12w
 
+# Kafka logging module
+#
 #[output_kafka]
 #enabled = false
 #host = 127.0.0.1
 #port = 9092
 #topic = elasticpot
 
-#[output_redis]
+# MongoDB logging module
+#
+#[output_mongodb]
+#enabled = false
+#connection_string = mongodb://username:password@host:port/database
+#host = 127.0.0.1
+#port = 27017
+#username = elasticpot
+#password = secret
+#database = elasticpot
+
+# RedisDB logging module
+#
+#[output_redisdb]
 #enabled = false
 #host = 127.0.0.1
 #port = 6379
@@ -266,3 +253,24 @@ enabled = false
 # Method to use when sending data to redis.
 # Can be one of [lpush, rpush, publish]. Defaults to lpush
 #send_method = lpush
+
+# Rethinkdb output module
+#
+#[output_rethinkdblog]
+#enabled = false
+#host = 127.0.0.1
+#port = 28015
+#table = output
+#password =
+#db = elasticpot
+
+# SQLite3 logging module
+#
+# Logging to SQLite3 database. To init the database, use the script
+# docs/sql/sqlite3.sql:
+#     sqlite3 <db_file> < docs/sql/sqlite3.sql
+#
+#[output_sqlite]
+#enabled = false
+#db_file = elasticpot.db
+
