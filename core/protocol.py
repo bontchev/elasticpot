@@ -79,6 +79,8 @@ class Index(Resource):
             # /_nodes
             # /_nodes/stats
             return self.fake_nodes(request)
+            # Not handled:
+            # /_nodes/_local
         elif url_path[0].startswith('_search'):
             # /_search
             # /_search?pretty
@@ -120,6 +122,8 @@ class Index(Resource):
                 elif url_path[1] == 'stats':
                     # /_cluster/stats
                     return self.fake_stats2(request)
+                # Not handled:
+                # /_cluster/state
                 else:
                     return self.fake_error(request, url_path[0])
             else:
@@ -131,15 +135,16 @@ class Index(Resource):
             # These should return
             # {"error": "Incorrect HTTP method for uri [{path}] and method [GET], allowed: [POST]","status": 405}
         else:
-            # /c
-            # /stat
-            # /nice%20ports,/Trinity.txt.bak
             # /api.php
-            # /login.php
-            # /system_api.php
+            # /c
             # /client_area/
+            # /login.php
+            # /nice%20ports,/Trinity.txt.bak
+            # /robots.txt
             # /stalker_portal/c/version.js
+            # /stat
             # /streaming
+            # /system_api.php
             return self.fake_error(request, url_path[0])
 
     def render_POST(self, request):
@@ -169,6 +174,8 @@ class Index(Resource):
                 if '/_search' in collapsed_path:
                     return self.fake_search(request)
 
+        # Not handled:
+        # /website/blog/
         # send empty response as we're now done
         return self.send_response(request)
 
