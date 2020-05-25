@@ -4,19 +4,15 @@ from time import time
 from random import randint
 from json import dumps, load
 
-from core import tools
+from core.tools import decode, get_local_ip, get_utc_time, logger, resolve_url, write_event
 
 from twisted.python import log
 from twisted.web.resource import Resource
 
 try:
     from urllib.parse import unquote
-    def decode(x):
-        return x.decode()
 except ImportError:
     from urlparse import unquote
-    def decode(x):
-        return x
 
 
 class Index(Resource):
@@ -43,9 +39,9 @@ class Index(Resource):
 
     def render_HEAD(self, request):
         path = unquote(decode(request.uri))
-        collapsed_path = tools.resolve_url(path)
+        collapsed_path = resolve_url(path)
 
-        tools.logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
+        logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
 
         event = {
             'eventid': 'elasticpot.recon',
@@ -59,10 +55,10 @@ class Index(Resource):
 
     def render_GET(self, request):
         path = unquote(decode(request.uri))
-        collapsed_path = tools.resolve_url(path)
+        collapsed_path = resolve_url(path)
         url_path = list(filter(None, collapsed_path.split('/')))
 
-        tools.logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
+        logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
 
         event = {
             'eventid': 'elasticpot.recon',
@@ -150,14 +146,14 @@ class Index(Resource):
     def render_POST(self, request):
         path = unquote(decode(request.uri))
 
-        tools.logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
+        logger(request, 'INFO', '{}: {}'.format(decode(request.method), path))
 
         if request.getHeader('Content-Length'):
-            collapsed_path = tools.resolve_url(path)
+            collapsed_path = resolve_url(path)
             content_length = int(request.getHeader('Content-Length'))
             if content_length > 0:
                 post_data = request.content.read()
-                tools.logger(request, 'INFO', 'POST body: {}'.format(decode(post_data)))
+                logger(request, 'INFO', 'POST body: {}'.format(decode(post_data)))
                 event = {
                     'eventid': 'elasticpot.attack',
                     'message': 'Exploit',
@@ -275,8 +271,8 @@ class Index(Resource):
 
     def report_event(self, request, event):
         unix_time = time()
-        human_time = tools.get_utc_time(unix_time)
-        local_ip = tools.get_local_ip()
+        human_time = get_utc_time(unix_time)
+        local_ip = get_local_ip()
         event['timestamp'] = human_time
         event['unixtime'] = unix_time
         event['src_ip'] = request.getClientAddress().host
@@ -294,7 +290,7 @@ class Index(Resource):
         accept_language = request.getHeader('Accept-Language')
         if accept_language:
             event['accept_language'] = accept_language
-        tools.write_event(event, self.cfg)
+        write_event(event, self.cfg)
 
     def get_json(self, page):
         if page not in self.page_cache:
