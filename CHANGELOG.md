@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added in version 1.0.3
 
-* Nothing yet
+* MongoDB output plugin
+* Redis database output plugin
 
 ### Changed in version 1.0.3
 
 * Minor fixes
+* Optimized the MySQL output plugin a bit
 * Improved the settings of future plugins
 
 ## [1.0.2]
