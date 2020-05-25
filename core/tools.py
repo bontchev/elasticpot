@@ -16,6 +16,13 @@ except ImportError:
     from urlparse import urlsplit, urlunsplit
 
 
+def decode(x):
+    if version_info[0] < 3:
+        return x
+    else:
+        return x.decode()
+
+
 def get_utc_time(unix_time):
     return datetime.utcfromtimestamp(unix_time).isoformat() + 'Z'
 
@@ -108,3 +115,41 @@ def stop_plugins(cfg):
             log.err(e)
             continue
 
+
+def geolocate(remote_ip, reader_city, reader_asn):
+    try:
+        response_city = reader_city.city(remote_ip)
+        city = response_city.city.name
+        if city is None:
+            city = ''
+        else:
+            city = decode(city.encode('utf-8'))
+        country = response_city.country.name
+        if country is None:
+            country = ''
+            country_code = ''
+        else:
+            country = decode(country.encode('utf-8'))
+            country_code = decode(response_city.country.iso_code.encode('utf-8'))
+    except Exception as e:
+        log.err(e)
+        city = ''
+        country = ''
+        country_code = ''
+
+    try:
+        response_asn = reader_asn.asn(remote_ip)
+        if response_asn.autonomous_system_organization is None:
+            org = ''
+        else:
+            org = decode(response_asn.autonomous_system_organization.encode('utf-8'))
+
+        if response_asn.autonomous_system_number is not None:
+            asn_num = response_asn.autonomous_system_number
+        else:
+            asn_num = 0
+    except Exception as e:
+        log.err(e)
+        org = ''
+        asn_num = 0
+    return country, country_code, city, org, asn_num

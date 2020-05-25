@@ -1,24 +1,15 @@
 
 import MySQLdb
 
-import core.output
-
+from core import output
 from core.config import CONFIG
+from core.tools import geolocate
 
 from hashlib import sha256
-from sys import version_info
 from geoip2.database import Reader
 
 from twisted.python import log
 from twisted.enterprise.adbapi import ConnectionPool
-
-
-if version_info[0] < 3:
-    def decode(x):
-        return x
-else:
-    def decode(x):
-        return x.decode()
 
 
 class ReconnectingConnectionPool(ConnectionPool):
@@ -46,38 +37,30 @@ class ReconnectingConnectionPool(ConnectionPool):
                 self, interaction, *args, **kw)
 
 
-class Output(core.output.Output):
-
-    def __init__(self, general_options):
-        self.host = CONFIG.get('output_mysql', 'host', fallback='localhost')
-        self.database = CONFIG.get('output_mysql', 'database', fallback='')
-        self.user = CONFIG.get('output_mysql', 'username', fallback='')
-        self.password = CONFIG.get('output_mysql', 'password', fallback='', raw=True)
-        self.port = CONFIG.getint('output_mysql', 'port', fallback=3306)
-
-        self.geoipdb_city_path = CONFIG.get('output_mysql', 'geoip_citydb', fallback='')
-        self.geoipdb_asn_path = CONFIG.get('output_mysql', 'geoip_asndb', fallback='')
-
-        self.debug = CONFIG.getboolean('output_mysql', 'debug', fallback=False)
-        self.geoip = CONFIG.getboolean('output_mysql', 'geoip', fallback=True)
-
-        self.dbh = None
-
-        core.output.Output.__init__(self, general_options)
+class Output(output.Output):
 
     def local_log(self, msg):
         if self.debug:
             log.msg(msg)
 
     def start(self):
+        host = CONFIG.get('output_mysql', 'host', fallback='localhost')
+        database = CONFIG.get('output_mysql', 'database', fallback='')
+        user = CONFIG.get('output_mysql', 'username', fallback='')
+        password = CONFIG.get('output_mysql', 'password', fallback='', raw=True)
+        port = CONFIG.getint('output_mysql', 'port', fallback=3306)
+
+        self.debug = CONFIG.getboolean('output_mysql', 'debug', fallback=False)
+        self.geoip = CONFIG.getboolean('output_mysql', 'geoip', fallback=True)
+
         try:
             self.dbh = ReconnectingConnectionPool(
                 'MySQLdb',
-                host=self.host,
-                db=self.database,
-                user=self.user,
-                passwd=self.password,
-                port=self.port,
+                host=host,
+                db=database,
+                user=user,
+                passwd=password,
+                port=port,
                 charset='utf8',
                 use_unicode=True,
                 cp_min=1,
@@ -87,22 +70,24 @@ class Output(core.output.Output):
             self.local_log('MySQL plugin: Error {}: {}'.format(e.args[0], e.args[1]))
 
         if self.geoip:
+            geoipdb_city_path = CONFIG.get('output_mysql', 'geoip_citydb', fallback='')
+            geoipdb_asn_path = CONFIG.get('output_mysql', 'geoip_asndb', fallback='')
             try:
-                self.reader_city = Reader(self.geoipdb_city_path)
+                self.reader_city = Reader(geoipdb_city_path)
             except:
-                self.local_log('Failed to open City GeoIP database {}'.format(self.geoipdb_city_path))
+                self.local_log('Failed to open City GeoIP database {}'.format(geoipdb_city_path))
 
             try:
-                self.reader_asn = Reader(self.geoipdb_asn_path)
+                self.reader_asn = Reader(geoipdb_asn_path)
             except:
-                self.local_log('Failed to open ASN GeoIP database {}'.format(self.geoipdb_asn_path))
+                self.local_log('Failed to open ASN GeoIP database {}'.format(geoipdb_asn_path))
 
     def stop(self):
         if self.geoip:
             if self.reader_city is not None:
-               self.reader_city.close()
+                self.reader_city.close()
             if self.reader_asn is not None:
-               self.reader_asn.close()
+                self.reader_asn.close()
 
     def write(self, event):
         """
@@ -161,44 +146,6 @@ class Output(core.output.Output):
                 id = 0
         return id
 
-    def geolocate(self, remote_ip):
-        try:
-            response_city = self.reader_city.city(remote_ip)
-            city = response_city.city.name
-            if city is None:
-                city = ''
-            else:
-                city = decode(city.encode('utf-8'))
-            country = response_city.country.name
-            if country is None:
-                country = ''
-                country_code = ''
-            else:
-                country = decode(country.encode('utf-8'))
-                country_code = decode(response_city.country.iso_code.encode('utf-8'))
-        except Exception as e:
-            self.local_log(e)
-            city = ''
-            country = ''
-            country_code = ''
-
-        try:
-            response_asn = self.reader_asn.asn(remote_ip)
-            if response_asn.autonomous_system_organization is None:
-                org = ''
-            else:
-                org = decode(response_asn.autonomous_system_organization.encode('utf-8'))
-
-            if response_asn.autonomous_system_number is not None:
-                asn_num = response_asn.autonomous_system_number
-            else:
-                asn_num = 0
-        except Exception as e:
-            self.local_log(e)
-            org = ''
-            asn_num = 0
-        return country, country_code, city, org, asn_num
-
     def connect_event(self, txn, event):
         remote_ip = event['src_ip']
 
@@ -233,7 +180,7 @@ class Output(core.output.Output):
             message_id, agent_id, content_id, language_id, event['dst_ip'], event['dst_port'], sensor_id, ))
 
         if self.geoip:
-            country, country_code, city, org, asn_num = self.geolocate(remote_ip)
+            country, country_code, city, org, asn_num = geolocate(remote_ip, self.reader_city, self.reader_asn)
             self.simple_query(txn, """
                 INSERT INTO `geolocation` (`ip`, `country_name`, `country_iso_code`, `city_name`, `org`, `org_asn`)
                 VALUES (%s, %s, %s, %s, %s, %s)
