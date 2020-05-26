@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * MongoDB output plugin
 * Redis database output plugin
+* Rethink database output plugin
 
 ### Changed in version 1.0.3
 
