@@ -277,7 +277,6 @@ class Index(Resource):
         event['unixtime'] = unix_time
         event['src_ip'] = request.getClientAddress().host
         event['src_port'] = request.getClientAddress().port
-        event['dst_ip'] = local_ip
         event['dst_port'] = self.cfg['port']
         event['sensor'] = self.cfg['sensor']
         event['request'] = decode(request.method)
@@ -290,6 +289,7 @@ class Index(Resource):
         accept_language = request.getHeader('Accept-Language')
         if accept_language:
             event['accept_language'] = accept_language
+        event['dst_ip'] = self.cfg['public_ip'] if self.cfg['report_public_ip'] else local_ip
         write_event(event, self.cfg)
 
     def get_json(self, page):

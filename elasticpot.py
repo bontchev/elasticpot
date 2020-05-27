@@ -65,9 +65,6 @@ def set_options():
     else:
         cfg_options['logfile'] = None
     cfg_options['sensor'] = CONFIG.get('honeypot', 'sensor_name', fallback=gethostname())
-    cfg_options['spoofed_version'] = CONFIG.get('honeypot', 'spoofed_version', fallback='1.4.1')
-    cfg_options['instance_name'] = CONFIG.get('honeypot', 'instance_name', fallback='Green Goblin')
-    cfg_options['public_ip_url'] = CONFIG.get('honeypot', 'public_ip_url', fallback='https://ident.me')
     cfg_options['responses_dir'] = CONFIG.get('honeypot', 'responses_dir', fallback='responses')
 
     args = get_options(cfg_options)
@@ -75,14 +72,18 @@ def set_options():
     cfg_options['port'] = args.port
     cfg_options['logfile'] = args.logfile
     cfg_options['sensor'] = args.sensor
+    cfg_options['public_ip_url'] = CONFIG.get('honeypot', 'public_ip_url', fallback='https://ident.me')
     cfg_options['public_ip'] = get_public_ip(cfg_options['public_ip_url'])
     cfg_options['cluster_name'] = CONFIG.get('honeypot', 'cluster_name', fallback='elasticsearch')
     cfg_options['host_name'] = CONFIG.get('honeypot', 'host_name', fallback='elk')
+    cfg_options['instance_name'] = CONFIG.get('honeypot', 'instance_name', fallback='Green Goblin')
+    cfg_options['spoofed_version'] = CONFIG.get('honeypot', 'spoofed_version', fallback='1.4.1')
     cfg_options['build'] = CONFIG.get('honeypot', 'build', fallback='89d3241')
     cfg_options['total_processors'] = CONFIG.getint('honeypot', 'total_processors', fallback='12')
     cfg_options['total_cores'] = CONFIG.getint('honeypot', 'total_cores', fallback='24')
     cfg_options['total_sockets'] = CONFIG.getint('honeypot', 'total_sockets', fallback='48')
     cfg_options['mac_address'] = CONFIG.get('honeypot', 'mac_address', fallback='08:01:c7:3F:15:DD')
+    cfg_options['report_public_ip'] = CONFIG.getboolean('honeypot', 'report_public_ip', fallback=False)
 
     return cfg_options
 
