@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * MongoDB output plugin
 * Redis database output plugin
 * Rethink database output plugin
+* Influx database output plugin
 * Support for the `report_public_ip` option
 
 ### Changed in version 1.0.3
