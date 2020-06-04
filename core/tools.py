@@ -20,7 +20,7 @@ def decode(x):
     if version_info[0] < 3:
         return x
     else:
-        return x.decode()
+        return x.decode('utf-8')
 
 
 def get_utc_time(unix_time):

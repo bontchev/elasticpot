@@ -104,6 +104,8 @@ class Index(Resource):
                 # /_cat/indices?format=json
                 # /_cat/indices?format=json&h=index
                 # /_cat/indices?bytes=b&format=json
+                # /_cat/indices/1cf0aa9d61f185b59f643939f862c01f89b21360?bytes=b
+                # /_cat/indices/db18744ea5570fa9bf868df44fecd4b58332ff24?bytes=b
                 has_header = 'v' in url_path[1]
                 json_formatted = 'format=json' in url_path[1]
                 terse = 'h=index' in url_path[1]
@@ -134,6 +136,7 @@ class Index(Resource):
             # /api.php
             # /c
             # /client_area/
+            # /index/_search?pretty=true&q=*:*
             # /login.php
             # /nice%20ports,/Trinity.txt.bak
             # /robots.txt
@@ -152,8 +155,8 @@ class Index(Resource):
             collapsed_path = resolve_url(path)
             content_length = int(request.getHeader('Content-Length'))
             if content_length > 0:
-                post_data = request.content.read()
-                logger(request, 'INFO', 'POST body: {}'.format(decode(post_data)))
+                post_data = decode(request.content.read())
+                logger(request, 'INFO', 'POST body: {}'.format(post_data))
                 event = {
                     'eventid': 'elasticpot.attack',
                     'message': 'Exploit',
@@ -163,6 +166,7 @@ class Index(Resource):
 
                 self.report_event(request, event)
 
+                # /_search
                 # /_search?pretty
                 # /_search?source
                 # /1cf0aa9d61f185b59f643939f862c01f89b21360/_search
@@ -172,6 +176,8 @@ class Index(Resource):
 
         # Not handled:
         # /website/blog/
+        # /info/info
+        # /_sql?format=json
         # send empty response as we're now done
         return self.send_response(request)
 
