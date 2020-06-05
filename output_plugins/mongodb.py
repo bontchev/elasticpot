@@ -21,12 +21,12 @@ class Output(output.Output):
         host = CONFIG.get('output_mongodb', 'host', fallback='localhost')
         port = CONFIG.getint('output_mongodb', 'port', fallback=27017)
         username = CONFIG.get('output_mongodb', 'username', fallback='', raw=True)
-        password = CONFIG.get('output_mongodb', 'password', fallback='')
+        password = CONFIG.get('output_mongodb', 'password', fallback='', raw=True)
         db_name = CONFIG.get('output_mongodb', 'database', fallback='elasticpot')
         db_addr = CONFIG.get('output_mongodb', 'connection_string')
         db_addr = db_addr.format(username, password, host, port, db_name)
 
-        self.geoip = CONFIG.getboolean('output_mysql', 'geoip', fallback=True)
+        self.geoip = CONFIG.getboolean('output_mongodb', 'geoip', fallback=True)
 
         try:
             self.mongo_client = MongoClient(db_addr)

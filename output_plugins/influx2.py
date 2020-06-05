@@ -14,7 +14,7 @@ class Output(output.Output):
 
     def start(self):
         host = CONFIG.get('output_influx2', 'host')
-        token = CONFIG.get('output_influx2', 'token')
+        token = CONFIG.get('output_influx2', 'token', raw=True)
 
         self.client = None
         try:

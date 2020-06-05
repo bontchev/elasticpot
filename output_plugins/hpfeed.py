@@ -27,8 +27,8 @@ class Output(output.Output):
             else:
                 endpoint = endpoints.HostnameEndpoint(reactor, server, port)
 
-        ident = CONFIG.get('output_hpfeed', 'identifier')
-        secret = CONFIG.get('output_hpfeed', 'secret')
+        ident = CONFIG.get('output_hpfeed', 'identifier', raw=True)
+        secret = CONFIG.get('output_hpfeed', 'secret', raw=True)
 
         self.client = ClientSessionService(endpoint, ident, secret)
         self.client.startService()

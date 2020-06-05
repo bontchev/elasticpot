@@ -46,7 +46,7 @@ class Output(output.Output):
     def start(self):
         host = CONFIG.get('output_mysql', 'host', fallback='localhost')
         database = CONFIG.get('output_mysql', 'database', fallback='')
-        user = CONFIG.get('output_mysql', 'username', fallback='')
+        user = CONFIG.get('output_mysql', 'username', fallback='', raw=True)
         password = CONFIG.get('output_mysql', 'password', fallback='', raw=True)
         port = CONFIG.getint('output_mysql', 'port', fallback=3306)
 

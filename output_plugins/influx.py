@@ -30,7 +30,7 @@ class Output(output.Output):
 
         if (CONFIG.has_option('output_influx', 'username') and
             CONFIG.has_option('output_influx', 'password')):
-            username = CONFIG.get('output_influx', 'username')
+            username = CONFIG.get('output_influx', 'username', raw=True)
             password = CONFIG.get('output_influx', 'password', raw=True)
             self.client.switch_user(username, password)
 
