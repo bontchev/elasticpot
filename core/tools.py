@@ -132,7 +132,7 @@ def geolocate(remote_ip, reader_city, reader_asn):
             country = decode(country.encode('utf-8'))
             country_code = decode(response_city.country.iso_code.encode('utf-8'))
     except Exception as e:
-        log.err(e)
+        log.msg(e)
         city = ''
         country = ''
         country_code = ''
@@ -149,7 +149,7 @@ def geolocate(remote_ip, reader_city, reader_asn):
         else:
             asn_num = 0
     except Exception as e:
-        log.err(e)
+        log.msg(e)
         org = ''
         asn_num = 0
     return country, country_code, city, org, asn_num
