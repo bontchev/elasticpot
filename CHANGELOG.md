@@ -11,10 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * MongoDB output plugin
 * Redis database output plugin
-* Rethink database output plugin
+* Rethink database output plugin (not tested!)
 * Influx database (versions 1.7 and earlier only) output plugin (not tested!)
 * Influx 2.0 database (requires Python 3; not tested)
-* Support for the `report_public_ip` option
+* Support for the `report_public_ip` config file option
 
 ### Changed in version 1.0.3
 
