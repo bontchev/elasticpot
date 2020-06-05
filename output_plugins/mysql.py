@@ -70,8 +70,8 @@ class Output(output.Output):
             self.local_log('MySQL plugin: Error {}: {}'.format(e.args[0], e.args[1]))
 
         if self.geoip:
-            geoipdb_city_path = CONFIG.get('output_mysql', 'geoip_citydb', fallback='')
-            geoipdb_asn_path = CONFIG.get('output_mysql', 'geoip_asndb', fallback='')
+            geoipdb_city_path = CONFIG.get('output_mysql', 'geoip_citydb', fallback='data/GeoLite2-City.mmdb')
+            geoipdb_asn_path = CONFIG.get('output_mysql', 'geoip_asndb', fallback='data/GeoLite2-ASN.mmdb')
             try:
                 self.reader_city = Reader(geoipdb_city_path)
             except:

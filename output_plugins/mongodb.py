@@ -39,8 +39,8 @@ class Output(output.Output):
             log.err('output_mongodb: Error: {}'.format(e))
 
         if self.geoip:
-            geoipdb_city_path = CONFIG.get('output_mongodb', 'geoip_citydb', fallback='')
-            geoipdb_asn_path = CONFIG.get('output_mongodb', 'geoip_asndb', fallback='')
+            geoipdb_city_path = CONFIG.get('output_mongodb', 'geoip_citydb', fallback='data/GeoLite2-City.mmdb')
+            geoipdb_asn_path = CONFIG.get('output_mongodb', 'geoip_asndb', fallback='data/GeoLite2-ASN.mmdb')
             try:
                 self.reader_city = Reader(geoipdb_city_path)
             except:
