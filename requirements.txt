@@ -15,24 +15,27 @@ mysqlclient>=1.3.12
 # HPFeeds
 hpfeeds>=3.0.0
 
+# influx
+influxdb
+
+# influx 2.0 (requires Python 3)
+#influxdb-client
+
+# mongodb
+pymongo
+
+# redisdb
+redis
+
+# rethinkdblog
+rethinkdb>=2.4
+
 # TODO:
 
 # elasticlog
 #elasticsearch
 
-# influx
-#influxdb
-
 # kafka
 #afkak
 #python-snappy
-
-# mongodb
-#pymongo
-
-# redisdb
-#redis
-
-# rethinkdblog
-#rethinkdb
 

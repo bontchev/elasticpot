@@ -100,7 +100,6 @@ log_path = log
 # (default: https://ident.me)
 #public_ip_url = https://ident.me
 
-# TODO:
 # Enable to log the public IP of the honeypot (useful if listening on 127.0.0.1)
 # IP address is obtained by querying public_ip_url
 #
@@ -108,7 +107,6 @@ log_path = log
 #report_public_ip = false
 
 
-# TODO:
 # ============================================================================
 # Output Plugins
 # These provide an extensible mechanism to send audit log entries to third
@@ -164,6 +162,69 @@ enabled = false
 #secret = secret
 #channel = elasticpot
 
+# MongoDB logging module
+#
+#[output_mongodb]
+#enabled = false
+#host = 127.0.0.1
+#port = 27017
+#username = elasticpot
+#password = secret
+#database = elasticpot
+# Note: .format(username, password, host, port, database) is done
+#  on the following string; make sure that there are 5 placeholders ({}) in it
+#connection_string = mongodb://{}:{}@{}:{}/{}
+# Whether to store geolocation data in the database
+#geoip = true
+# Location of the databases used for geolocation
+#geoip_citydb = data/GeoLite2-City.mmdb
+#geoip_asndb = data/GeoLite2-ASN.mmdb
+
+# RedisDB logging module
+#
+#[output_redisdb]
+#enabled = false
+#host = 127.0.0.1
+#port = 6379
+# DB of the redis server. Defaults to 0
+#db = 0
+# Password of the redis server. Defaults to None
+#password = secret
+# Name of the list to push to or the channel to publish to. Required
+#keyname = elasticpot
+# Method to use when sending data to redis.
+# Can be one of [lpush, rpush, publish]. Defaults to lpush
+#send_method = lpush
+
+# Rethinkdb output module
+#
+#[output_rethinkdblog]
+#enabled = false
+#host = 127.0.0.1
+#port = 28015
+#table = events
+#db = elasticpot
+#password =
+
+# InfluxDB logging module
+#
+#[output_influx]
+#enabled = false
+#host = 127.0.0.1
+#port = 8086
+#database_name = elasticpot
+#retention_policy_duration = 12w
+
+# InfluxDB 2.0 logging module
+#
+#[output_influx2]
+#enabled = false
+#host = hostname
+#token = token
+#org = organization
+#bucket = elasticpot
+
+
 # TODO:
 
 # Supports logging to Elasticsearch
@@ -210,15 +271,6 @@ enabled = false
 # verify SSL certificates
 #verify_certs = true
 
-# InfluxDB logging module
-#
-#[output_influx]
-#enabled = false
-#host = 127.0.0.1
-#port = 8086
-#database_name = elasticpot
-#retention_policy_duration = 12w
-
 # Kafka logging module
 #
 #[output_kafka]
@@ -226,43 +278,6 @@ enabled = false
 #host = 127.0.0.1
 #port = 9092
 #topic = elasticpot
-
-# MongoDB logging module
-#
-#[output_mongodb]
-#enabled = false
-#connection_string = mongodb://username:password@host:port/database
-#host = 127.0.0.1
-#port = 27017
-#username = elasticpot
-#password = secret
-#database = elasticpot
-
-# RedisDB logging module
-#
-#[output_redisdb]
-#enabled = false
-#host = 127.0.0.1
-#port = 6379
-# DB of the redis server. Defaults to 0
-#db = 0
-# Password of the redis server. Defaults to None
-#password = secret
-# Name of the list to push to or the channel to publish to. Required
-#keyname = elasticpot
-# Method to use when sending data to redis.
-# Can be one of [lpush, rpush, publish]. Defaults to lpush
-#send_method = lpush
-
-# Rethinkdb output module
-#
-#[output_rethinkdblog]
-#enabled = false
-#host = 127.0.0.1
-#port = 28015
-#table = output
-#password =
-#db = elasticpot
 
 # SQLite3 logging module
 #
