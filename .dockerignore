@@ -2,6 +2,7 @@
 **/*.md
 **/*.pid
 **/.*
+**/__pycache__/
 Dockerfile
 bin/
 docs/
