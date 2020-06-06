@@ -29,6 +29,7 @@ activate_venv() {
     then
         return 1
     fi
+    # shellcheck disable=SC1090
     source "$VENV/bin/activate"
     return 0
 }
@@ -54,7 +55,7 @@ honeypot_start() {
     honeypot_status
     PID=$(cat "${PIDFILE}" 2>/dev/null || echo -n "")
 
-    if [ ! -z "$VIRTUAL_ENV" ]
+    if [ -n "$VIRTUAL_ENV" ]
     then
         echo 2>&1 "Using activated Python virtual environment \"$VIRTUAL_ENV\""
     elif activate_venv "$HONEYPOT_VIRTUAL_ENV"
