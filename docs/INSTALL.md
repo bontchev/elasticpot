@@ -7,7 +7,6 @@
   - [Step 4: Checkout the code](#step-4-checkout-the-code)
   - [Step 5: Setup Virtual Environment](#step-5-setup-virtual-environment)
   - [Step 6: Create a configuration file](#step-6-create-a-configuration-file)
-  - [Step 7: Start the honeypot](#step-7-start-the-honeypot)
   - [Configure additional output plugins (OPTIONAL)](#configure-additional-output-plugins-optional)
   - [Change the default responses (OPTIONAL)](#change-the-default-responses-optional)
   - [Docker usage (OPTIONAL)](#docker-usage-optional)
@@ -183,15 +182,21 @@ File | Send as a response to the query
 `aliases.json` | Anything containing `alias`
 `banner.json` | `/`
 `cluster.json` | Anythinig starting with `/_cluster/health`
+`clusterstore.json` | `/_stats/store/?level=cluster`
 `error.json` | Any unrecognized query
 `index1long.json`, `index2long.json` | A `/_cat/indices` query that doesn't contain the parameter `h=index`
 `index1short.json`, `index2short.json` | A `/_cat/indices` query that contains the parameter `h=index`
 `indices.txt` | A `/_cat/indices` query that doesn't contain the parameter `format=json`
 `nodes.json` | Anything starting with `/_nodes`
+`nodes2.json` | Anything starting with `/_cat/nodes` that also contains the parameter `format=json`
+`nodes2.txt` | Anything starting with `/_cat/nodes`
+`mapping.json` | `/_mapping`
 `pluginhead.html` | `/_plugin/head`
 `search.json` | Anything starting with `/_search`
+`search2.json` | `/<index_name>/_search`
 `stats1.json` | Anything starting with `/_stats`
 `stats2.json` | `/_cluster/stats`
+`store.json` | `/_stats/store`
 
 It is advisable to leave the file `banner.json` unchanged, because it
 identifies the simulated Elasticsearch server as being an old version, which
