@@ -1,0 +1,21 @@
+{
+  "_shards" : {
+    "total" : 6,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "_all" : {
+    "primaries" : {
+      "store" : {
+        "size" : "13.6kb",
+        "size_in_bytes" : 13962
+      }
+    },
+    "total" : {
+      "store" : {
+        "size" : "13.6kb",
+        "size_in_bytes" : 13962
+      }
+    }
+  }
+}

@@ -21,6 +21,7 @@ class Index(Resource):
         'aliases.json': '',
         'banner.json': '',
         'cluster.json': '',
+        'clusterstore.json': '',
         'error.json': '',
         'index1long.json': '',
         'index1short.json': '',
@@ -28,10 +29,15 @@ class Index(Resource):
         'index2short.json': '',
         'indices.txt': '',
         'nodes.json': '',
+        'nodes2.json': '',
+        'nodes2.txt': '',
+        'mapping.json': '',
         'pluginhead.html': '',
         'search.json': '',
+        'search2.json': '',
         'stats1.json': '',
-        'stats2.json': ''
+        'stats2.json': '',
+        'store.json': ''
     }
 
     def __init__(self, options):
@@ -83,9 +89,19 @@ class Index(Resource):
             # /_search?source
             return self.fake_search(request)
         elif url_path[0] == '_stats':
-            # /_stats
-            # /_stats/indexing
-            return self.fake_stats1(request)
+            if len(url_path) >= 2 and url_path[1] == 'store':
+                # /_stats/store
+                # /_stats/store/?pretty&human&level=cluster
+                cluster = 'level=cluster' in collapsed_path
+                pretty = 'pretty' in collapsed_path
+                return self.fake_store(request, cluster, pretty)
+            else:
+                # /_stats
+                # /_stats/indexing
+                return self.fake_stats1(request)
+        elif url_path[0] == '_mapping':
+            # /_mapping
+            return self.fake_mapping(request)
         elif url_path[0].startswith('favicon.'):
             # /favicon.ico
             return self.send_response(request)
@@ -97,22 +113,39 @@ class Index(Resource):
             # /_cat/aliases?format=json&h=alias
             return self.fake_alias(request)
         elif len(url_path) >= 2:
-            if url_path[0] == '_cat' and url_path[1].startswith('indices'):
-                # /_cat/indices
-                # /_cat/indices?pretty
-                # /_cat/indices?v
-                # /_cat/indices?format=json
-                # /_cat/indices?format=json&h=index
-                # /_cat/indices?bytes=b&format=json
-                # /_cat/indices/1cf0aa9d61f185b59f643939f862c01f89b21360?bytes=b
-                # /_cat/indices/db18744ea5570fa9bf868df44fecd4b58332ff24?bytes=b
-                has_header = 'v' in url_path[1]
-                json_formatted = 'format=json' in url_path[1]
-                terse = 'h=index' in url_path[1]
-                return self.fake_indices(request, has_header, json_formatted, terse)
+            if url_path[0] == '_cat':
+                if url_path[1].startswith('indices'):
+                    # /_cat/indices
+                    # /_cat/indices?pretty
+                    # /_cat/indices?v
+                    # /_cat/indices?format=json
+                    # /_cat/indices?format=json&h=index
+                    # /_cat/indices?bytes=b&format=json
+                    # /_cat/indices/1cf0aa9d61f185b59f643939f862c01f89b21360?bytes=b
+                    # /_cat/indices/db18744ea5570fa9bf868df44fecd4b58332ff24?bytes=b
+                    has_header = 'v' in url_path[1]
+                    json_formatted = 'format=json' in url_path[1]
+                    terse = 'h=index' in url_path[1]
+                    return self.fake_indices(request, has_header, json_formatted, terse)
+                elif url_path[1].startswith('nodes'):
+                    # /_cat/nodes
+                    # /_cat/nodes?format=json
+                    # /_cat/nodes?h=name,id,i,po,v,m,u,dt,du,r,gto
+                    json_formatted = 'format=json' in url_path[1]
+                    return self.fake_nodes2(request, json_formatted)
+                else:
+                    return self.fake_error(request, url_path[0])
             elif url_path[0] == '_plugin' and url_path[1].startswith('head'):
                 # /_plugin/head
                 return self.fake_plugins(request)
+            elif url_path[-1].startswith('_search'):
+                # /1cf0aa9d61f185b59f643939f862c01f89b21360/_search?pretty=true&q=*:*
+                # /1cf0aa9d61f185b59f643939f862c01f89b21360/_search?size=5000
+                # /db18744ea5570fa9bf868df44fecd4b58332ff24/_search?pretty=true&q=*:*
+                # /db18744ea5570fa9bf868df44fecd4b58332ff24/_search?size=5000
+                json_formatted = 'pretty' in url_path[-1]
+                index = url_path[0]
+                return self.fake_search2(request, index, json_formatted)
             elif url_path[0] == '_cluster':
                 if url_path[1].startswith('health'):
                     # /_cluster/health
@@ -238,6 +271,16 @@ class Index(Resource):
         page = dumps(response, separators=(',', ':'))
         return self.send_response(request, page)
 
+    def fake_nodes2(self, request, json_formatted):
+        public_ip = decode(self.cfg['public_ip'])
+        if json_formatted:
+            response = self.get_json('nodes2.json')
+            response['ip'] = public_ip
+            page = '[{}]'.format(dumps(response, separators=(',', ':')))
+        else:
+            page = '{} {}'.format(public_ip, self.get_page('nodes2.txt'))
+        return self.send_response(request, page)
+
     def fake_search(self, request):
         shards = randint(5, 50)
         response = self.get_json('search.json')
@@ -245,6 +288,15 @@ class Index(Resource):
         response['_shards']['total'] = shards
         response['_shards']['successful'] = shards
         page = dumps(response, separators=(',', ':'))
+        return self.send_response(request, page)
+
+    def fake_search2(self, request, index, json_formatted):
+        response = self.get_json('search2.json')
+        response['hits']['hits'][0]['_index'] = index
+        if json_formatted:
+            page = dumps(response, indent=2, separators=(',', ' : '))
+        else:
+            page = dumps(response, separators=(',', ':'))
         return self.send_response(request, page)
 
     def fake_plugins(self, request):
@@ -262,6 +314,21 @@ class Index(Resource):
         response['nodes']['os']['available_processors'] = self.cfg['total_processors']
         response['timestamp'] = int(time())
         page = dumps(response, separators=(',', ':'))
+        return self.send_response(request, page)
+
+    def fake_mapping(self, request):
+        page = self.get_page('mapping.json')
+        return self.send_response(request, page)
+
+    def fake_store(self, request, cluster, pretty):
+        if cluster:
+            response = self.get_json('clusterstore.json')
+        else:
+            response = self.get_json('store.json')
+        if pretty:
+            page = dumps(response, indent=2, separators=(',', ' : '))
+        else:
+            page = dumps(response, separators=(',', ':'))
         return self.send_response(request, page)
 
     def fake_error(self, request, index):
@@ -300,6 +367,7 @@ class Index(Resource):
 
     def get_json(self, page):
         if page not in self.page_cache:
+            log.msg('Missing JSON file: "{}".'.format(page))
             return {}
         if self.page_cache[page] == '':
             with open('{}{}{}'.format(self.cfg['responses_dir'], sep, page), 'r') as f:
@@ -309,10 +377,14 @@ class Index(Resource):
     # a simple wrapper to cache files from "responses" folder
     def get_page(self, page):
         if page not in self.page_cache:
-            return ''
+            log.msg('Missing file: "{}".'.format(page))
+            if page.lower().endswith('.json'):
+                return '{}'
+            else:
+                return ''
         # if page is not in cache, load it from file
         if self.page_cache[page] == '':
-            if page.endswith('.json'):
+            if page.lower().endswith('.json'):
                 self.page_cache[page] = dumps(self.get_json(page), separators=(',', ':'))
             else:
                 with open('{}{}{}'.format(self.cfg['responses_dir'], sep, page), 'r') as f:

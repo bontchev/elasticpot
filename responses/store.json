@@ -1,0 +1,47 @@
+{
+    "_all": {
+        "primaries": {
+            "store": {
+                "size_in_bytes": 13962
+            }
+        },
+        "total": {
+            "store": {
+                "size_in_bytes": 13962
+            }
+        }
+    },
+    "_shards": {
+        "failed": 0,
+        "successful": 3,
+        "total": 6
+    },
+    "indices": {
+        "1cf0aa9d61f185b59f643939f862c01f89b21360": {
+            "primaries": {
+                "store": {
+                    "size_in_bytes": 9534
+                }
+            },
+            "total": {
+                "store": {
+                    "size_in_bytes": 9534
+                }
+            },
+            "uuid": "0S8M7jXJQVmohFpHZvOFkw"
+        },
+        "db18744ea5570fa9bf868df44fecd4b58332ff24": {
+            "primaries": {
+                "store": {
+                    "size_in_bytes": 4145
+                }
+            },
+            "total": {
+                "store": {
+                    "size_in_bytes": 4145
+                }
+            },
+            "uuid": "xqUeI_71QHy30B1W_RJ39A"
+        }
+    }
+}

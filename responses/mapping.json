@@ -1,0 +1,41 @@
+{
+    "1cf0aa9d61f185b59f643939f862c01f89b21360": {
+        "mappings": {
+            "properties": {
+                "description": {
+                    "fields": {
+                        "keyword": {
+                            "ignore_above": 256,
+                            "type": "keyword"
+                        }
+                    },
+                    "type": "text"
+                },
+                "name": {
+                    "fields": {
+                        "keyword": {
+                            "ignore_above": 256,
+                            "type": "keyword"
+                        }
+                    },
+                    "type": "text"
+                }
+            }
+        }
+    },
+    "db18744ea5570fa9bf868df44fecd4b58332ff24": {
+        "mappings": {
+            "properties": {
+                "name": {
+                    "fields": {
+                        "keyword": {
+                            "ignore_above": 256,
+                            "type": "keyword"
+                        }
+                    },
+                    "type": "text"
+                }
+            }
+        }
+    }
+}

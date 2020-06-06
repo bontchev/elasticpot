@@ -1,0 +1,11 @@
+{
+    "cpu": "100",
+    "heap.percent": "10",
+    "load_15m": "1.53",
+    "load_1m": "1.43",
+    "load_5m": "1.56",
+    "master": "*",
+    "name": "79cc84ce5091",
+    "node.role": "dim",
+    "ram.percent": "96"
+}
