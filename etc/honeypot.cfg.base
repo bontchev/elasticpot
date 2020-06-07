@@ -224,6 +224,36 @@ enabled = false
 #org = organization
 #bucket = elasticpot
 
+# CouchDB logging module
+#
+#[output_couch]
+#enabled = false
+#host = localhost
+#port = 5984
+#username = elasticpot
+#password = secret
+#database = elasticpot
+#geoip = true
+# Location of the databases used for geolocation
+#geoip_citydb = data/GeoLite2-City.mmdb
+#geoip_asndb = data/GeoLite2-ASN.mmdb
+
+# SQLite3 logging module
+#
+# Logging to SQLite3 database. To init the database, use the script
+# docs/sql/sqlite3.sql:
+#     sqlite3 <db_file> < docs/sql/sqlite3.sql
+#
+#[output_sqlite]
+#enabled = false
+#debug = false
+#db_file = data/elasticpot.db
+# Whether to store geolocation data in the database
+#geoip = true
+# Location of the databases used for geolocation
+#geoip_citydb = data/GeoLite2-City.mmdb
+#geoip_asndb = data/GeoLite2-ASN.mmdb
+
 
 # TODO:
 
@@ -278,14 +308,4 @@ enabled = false
 #host = 127.0.0.1
 #port = 9092
 #topic = elasticpot
-
-# SQLite3 logging module
-#
-# Logging to SQLite3 database. To init the database, use the script
-# docs/sql/sqlite3.sql:
-#     sqlite3 <db_file> < docs/sql/sqlite3.sql
-#
-#[output_sqlite]
-#enabled = false
-#db_file = elasticpot.db
 
