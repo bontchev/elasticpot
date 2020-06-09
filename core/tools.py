@@ -71,7 +71,7 @@ def write_event(event, cfg):
         try:
             plugin.write(event)
         except Exception as e:
-            log.err(e)
+            log.msg(e)
             continue
 
 
@@ -100,9 +100,9 @@ def import_plugins(cfg):
             output_plugins.append(output)
             log.msg('Loaded output engine: {}'.format(engine))
         except ImportError as e:
-            log.err('Failed to load output engine: {} due to ImportError: {}'.format(engine, e))
+            log.msg('Failed to load output engine: {} due to ImportError: {}'.format(engine, e))
         except Exception as e:
-            log.err('Failed to load output engine: {} {}'.format(engine, e))
+            log.msg('Failed to load output engine: {} {}'.format(engine, e))
     return output_plugins
 
 
@@ -112,7 +112,7 @@ def stop_plugins(cfg):
         try:
             plugin.stop()
         except Exception as e:
-            log.err(e)
+            log.msg(e)
             continue
 
 

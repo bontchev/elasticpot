@@ -14,7 +14,7 @@ class Output(output.Output):
         try:
             return collection.insert_one(event).inserted_id
         except Exception as e:
-            log.err('output_mongodb: Error: {}'.format(e))
+            log.msg('output_mongodb: Error: {}'.format(e))
             return None
 
     def start(self):
@@ -36,7 +36,7 @@ class Output(output.Output):
             if self.geoip:
                 self.col_geolocation = self.mongo_db['geolocation']
         except Exception as e:
-            log.err('output_mongodb: Error: {}'.format(e))
+            log.msg('output_mongodb: Error: {}'.format(e))
 
         if self.geoip:
             geoipdb_city_path = CONFIG.get('output_mongodb', 'geoip_citydb', fallback='data/GeoLite2-City.mmdb')
@@ -44,12 +44,12 @@ class Output(output.Output):
             try:
                 self.reader_city = Reader(geoipdb_city_path)
             except:
-                log.err('Failed to open City GeoIP database {}'.format(geoipdb_city_path))
+                log.msg('Failed to open City GeoIP database {}'.format(geoipdb_city_path))
 
             try:
                 self.reader_asn = Reader(geoipdb_asn_path)
             except:
-                log.err('Failed to open ASN GeoIP database {}'.format(geoipdb_asn_path))
+                log.msg('Failed to open ASN GeoIP database {}'.format(geoipdb_asn_path))
 
     def stop(self):
         self.mongo_client.close()

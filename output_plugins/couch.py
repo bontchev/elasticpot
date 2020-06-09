@@ -25,7 +25,7 @@ class Output(output.Output):
             else:
                 self.couch_db = couchserver.create(db_name)
         except Exception as e:
-            log.err('output_couch: Error: {}'.format(e))
+            log.msg('output_couch: Error: {}'.format(e))
 
         self.geoip = CONFIG.getboolean('output_couch', 'geoip', fallback=True)
 
@@ -35,12 +35,12 @@ class Output(output.Output):
             try:
                 self.reader_city = Reader(geoipdb_city_path)
             except:
-                log.err('Failed to open City GeoIP database {}'.format(geoipdb_city_path))
+                log.msg('Failed to open City GeoIP database {}'.format(geoipdb_city_path))
 
             try:
                 self.reader_asn = Reader(geoipdb_asn_path)
             except:
-                log.err('Failed to open ASN GeoIP database {}'.format(geoipdb_asn_path))
+                log.msg('Failed to open ASN GeoIP database {}'.format(geoipdb_asn_path))
 
     def stop(self):
         if self.geoip:
@@ -61,4 +61,4 @@ class Output(output.Output):
         try:
             self.couch_db.save(event)
         except Exception as e:
-            log.err('output_couch: Error: {}'.format(e))
+            log.msg('output_couch: Error: {}'.format(e))

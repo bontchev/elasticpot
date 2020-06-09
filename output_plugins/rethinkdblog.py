@@ -27,7 +27,7 @@ class Output(output.Output):
             r.db_create(db).run(self.connection)
             r.db(db).table_create(self.table).run(self.connection)
         except r.RqlRuntimeError as err:
-            log.err('output_rethinkdblog: Error: {}'.format(err.message))
+            log.msg('output_rethinkdblog: Error: {}'.format(err.message))
 
     def stop(self):
         self.connection.close()
@@ -36,4 +36,4 @@ class Output(output.Output):
         try:
             r.table(self.table).insert(event).run(self.connection)
         except r.RqlRuntimeError as err:
-            log.err('output_rethinkdblog: Error: {}'.format(err.message))
+            log.msg('output_rethinkdblog: Error: {}'.format(err.message))
