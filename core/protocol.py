@@ -35,6 +35,7 @@ class Index(Resource):
         'pluginhead.html': '',
         'search.json': '',
         'search2.json': '',
+        'settings.json': '',
         'stats1.json': '',
         'stats2.json': '',
         'store.json': ''
@@ -112,6 +113,9 @@ class Index(Resource):
             # /_aliases?pretty=true
             # /_cat/aliases?format=json&h=alias
             return self.fake_alias(request)
+        elif url_path[-1].startswith('_settings'):
+            # /*/_settings
+            return self.fake_settings(request)
         elif len(url_path) >= 2:
             if url_path[0] == '_cat':
                 if url_path[1].startswith('indices'):
@@ -173,6 +177,7 @@ class Index(Resource):
             # /login.php
             # /nice%20ports,/Trinity.txt.bak
             # /robots.txt
+            # /sitemap.xml
             # /stalker_portal/c/version.js
             # /stat
             # /streaming
@@ -318,6 +323,10 @@ class Index(Resource):
 
     def fake_mapping(self, request):
         page = self.get_page('mapping.json')
+        return self.send_response(request, page)
+
+    def fake_settings(self, request):
+        page = self.get_page('settings.json')
         return self.send_response(request, page)
 
     def fake_store(self, request, cluster, pretty):

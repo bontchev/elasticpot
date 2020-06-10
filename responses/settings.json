@@ -1,0 +1,30 @@
+{
+    "1cf0aa9d61f185b59f643939f862c01f89b21360": {
+        "settings": {
+            "index": {
+                "creation_date": "1588547573318",
+                "number_of_replicas": "1",
+                "number_of_shards": "1",
+                "provided_name": "1cf0aa9d61f185b59f643939f862c01f89b21360",
+                "uuid": "0S8M7jXJQVmohFpHZvOFkw",
+                "version": {
+                    "created": "7030199"
+                }
+            }
+        }
+    },
+    "db18744ea5570fa9bf868df44fecd4b58332ff24": {
+        "settings": {
+            "index": {
+                "creation_date": "1588547574785",
+                "number_of_replicas": "1",
+                "number_of_shards": "1",
+                "provided_name": "db18744ea5570fa9bf868df44fecd4b58332ff24",
+                "uuid": "xqUeI_71QHy30B1W_RJ39A",
+                "version": {
+                    "created": "7030199"
+                }
+            }
+        }
+    }
+}
