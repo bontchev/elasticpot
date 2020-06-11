@@ -254,12 +254,9 @@ enabled = false
 #geoip_citydb = data/GeoLite2-City.mmdb
 #geoip_asndb = data/GeoLite2-ASN.mmdb
 
-
-# TODO:
-
-# Supports logging to Elasticsearch
+# Elasticsearch logging module
 #
-#[output_elasticlog]
+#[output_elastic]
 #enabled = false
 #host = localhost
 #port = 9200
@@ -286,7 +283,7 @@ enabled = false
 # Credentials
 #
 #username = elasticpot
-#password = 
+#password = secret
 #
 # TLS encryption. Communications between the client (elasticpot) 
 # and the ES server should naturally be protected by encryption
@@ -296,10 +293,13 @@ enabled = false
 #
 # use ssl/tls
 #ssl = true
-# Path to trusted CA certs on disk
-#ca_certs = /path/to/cert/file/elastic_ca.crt
 # verify SSL certificates
 #verify_certs = true
+# Path to trusted CA certs on disk
+#ca_certs = /path/to/cert/file/elastic_ca.crt
+
+
+# TODO:
 
 # Kafka logging module
 #

@@ -33,11 +33,11 @@ rethinkdb>=2.4
 # couchdb
 couchdb
 
+# elasticlog
+elasticsearch>=7.7.1
+
 
 # TODO:
-
-# elasticlog
-#elasticsearch
 
 # kafka
 #afkak
