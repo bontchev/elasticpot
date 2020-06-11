@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * CoachDB output plugin
 * SQLite3 output plugin
+* Elasticsearch output plugin (ironic, I know)
 * Handling some additional Elasticsearch queries
 
 ### Changed in version 1.0.4
