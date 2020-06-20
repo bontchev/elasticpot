@@ -79,7 +79,7 @@ create a crontab job (`crontab -e`) and enter the following:
 
 Alternatively, if you already have the MaxMind geolocation databases installed
 and updated on your machine in some other place, use their respective paths in
-the `[mysql_output]` section of the file `honeyot.cfg`, as mentioned
+the `[output_mysql]` section of the file `honeyot.cfg`, as mentioned
 below.
 
 ## MySQL Configuration
