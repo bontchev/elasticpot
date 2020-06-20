@@ -125,7 +125,7 @@ Next, load the database schema:
 ```bash
 $ cd /home/elasticpot/elasticpot/
 $ mysql -p -u elasticpot elasticpot
-MySQL> source ./docs/sql/mysql.sql;
+MySQL> source ./docs/mysql/mysql.sql;
 MySQL> exit
 ```
 
