@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added in version 1.0.5
 
+* PostgreSQL output plugin
 * Documentation for the SQLite3 output pllugin
 
 ### Changed in version 1.0.5

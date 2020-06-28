@@ -36,6 +36,9 @@ couchdb
 # elasticlog
 elasticsearch>=7.7.1
 
+# postgres
+psycopg2
+
 
 # TODO:
 
