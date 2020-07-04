@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in version 1.0.6
 
-* Nothing yet
+* Fixed a link in the file `README.md`
+* Changed the version number in the `Dockerfile`
 
 ## [1.0.5]
 
