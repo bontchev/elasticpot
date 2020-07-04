@@ -1,7 +1,7 @@
 FROM python
 LABEL maintainer="Bontchev"
 LABEL name="elasticpot"
-LABEL version="1.0.4"
+LABEL version="1.0.6"
 EXPOSE 9200
 COPY . /elasticpot/
 WORKDIR /elasticpot
