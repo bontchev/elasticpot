@@ -1,6 +1,6 @@
 # Sending the Output of the Honeypot to an PostgreSQL Database
 
-- [Sending the Output of the Honeypot to a PostgreSQL Database](#sending-the-output-of-the-honeypot-to-a-postgresql-database)
+- [Sending the Output of the Honeypot to an PostgreSQL Database](#sending-the-output-of-the-honeypot-to-an-postgresql-database)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [PostgreSQL Database Creation](#postgresql-database-creation)
@@ -15,7 +15,7 @@
 ## Installation
 
 When writing to an PostgreSQL database, the honeypot uses the free databases
-provided by MaxMind for the purposes of geoloacting the IP addresses.
+provided by MaxMind for the purpose of geoloacting the IP addresses.
 Start by installing the library necessary to work with these databases
 from an account that can sudo (i.e., not from the user `elasticpot`):
 
@@ -25,7 +25,7 @@ sudo apt-get update
 sudo apt-get install PostgreSQL geoipupdate
 ```
 
-Then, make sure that PostgreSQL database and the `psql` command-line
+Then, make sure that the PostgreSQL database and the `psql` command-line
 utility for managing it are installed:
 
 ```bash
@@ -36,7 +36,7 @@ Log in as the user `postgres` (the super-user in PostgreSQL) and create
 the honeypot-related database users, the database, and grant proper
 privileges to it to the users:
 
-```bash
+```psql
 $ sudo su - postgres
 $ psql
 postgres=# create user elasticpot with password 'PASSWORD HERE';
@@ -155,6 +155,10 @@ Add the following entries to the file `~/elasticpot/etc/honeypot.cfg`
 [output_postgres]
 enabled = true
 debug = false
+host = localhost
+port = 5432
+username = elasticpot
+password = secret
 database = elasticpot
 # Whether to store geolocation data in the database
 geoip = true
@@ -163,10 +167,12 @@ geoip_citydb = data/GeoLite2-City.mmdb
 geoip_asndb = data/GeoLite2-ASN.mmdb
 ```
 
-Make sure the options `geoip_citydb` and `geoip_asndb` point to the correct
-paths of the two MaxMind geolocation databases. Also, if you prefer to keep
-the PostgreSQL database elsewhere, make sure that you specify its correct path
-with the `db_file` option.
+Make sure that you specify the correct information needed to connect to the
+database (the options `host`, `port`, `username`, and `password`) and that the
+options `geoip_citydb` and `geoip_asndb` point to the correct paths of the two
+MaxMind geolocation databases. Also, if you prefer to keep the PostgreSQL
+database under a different name, make sure that you specify its correct name
+with the `database` option.
 
 ## Restart the honeypot
 

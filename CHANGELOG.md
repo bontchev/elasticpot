@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added in version 1.0.5
 
-* PostgreSQL output plugin
+* PostgreSQL output plugin (with documentation)
 * Documentation for the SQLite3 output pllugin
+* Handling some additional Elasticsearch queries
 
 ### Changed in version 1.0.5
 
-* Fixed a typo in the changle log
+* Fixed a typo in the change log
 
 ## [1.0.4]
 
