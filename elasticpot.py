@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Licencing Agreement: MalwareTech Public Licence
-This software is free to use providing the user yells
-"Oh no, the cyberhackers are coming!" prior to each installation.
-"""
-
 from os.path import join
 from socket import gethostname
 from argparse import ArgumentParser
