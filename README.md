@@ -2,7 +2,7 @@
 
 This is a honeypot simulating a vulnerable Elasticsearch server opened to the
 Internet. It uses ideas from various other honeypots, like
-[ADBHoneypot](https://gitlab.com/venetay/adbhoneypot) (for output plugin
+[ADBHoneypot](https://gitlab.com/bontchev/adbhoneypot) (for output plugin
 support), [Citrix Honeypot](https://gitlab.com/bontchev/CitrixHoneypot) (for
 general structure), [Elastichoney](https://github.com/jordan-wright/elastichoney),
 (for a general example of an Elasticsearch honeypot).
