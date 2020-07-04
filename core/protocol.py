@@ -90,16 +90,10 @@ class Index(Resource):
             # /_search?source
             return self.fake_search(request)
         elif url_path[0] == '_stats':
-            if len(url_path) >= 2 and url_path[1] == 'store':
-                # /_stats/store
-                # /_stats/store/?pretty&human&level=cluster
-                cluster = 'level=cluster' in collapsed_path
-                pretty = 'pretty' in collapsed_path
-                return self.fake_store(request, cluster, pretty)
-            else:
-                # /_stats
-                # /_stats/indexing
-                return self.fake_stats1(request)
+            # /_stats
+            # /_stats/
+            # /_stats/indexing
+            return self.fake_stats1(request)
         elif url_path[0] == '_mapping':
             # /_mapping
             return self.fake_mapping(request)
@@ -116,6 +110,8 @@ class Index(Resource):
         elif url_path[-1].startswith('_settings'):
             # /*/_settings
             return self.fake_settings(request)
+            # Not handled (should return settings.json too):
+            # /*
         elif len(url_path) >= 2:
             if url_path[0] == '_cat':
                 if url_path[1].startswith('indices'):
@@ -124,6 +120,7 @@ class Index(Resource):
                     # /_cat/indices?v
                     # /_cat/indices?format=json
                     # /_cat/indices?format=json&h=index
+                    # /_cat/indices?format=text&v=true
                     # /_cat/indices?bytes=b&format=json
                     # /_cat/indices/1cf0aa9d61f185b59f643939f862c01f89b21360?bytes=b
                     # /_cat/indices/db18744ea5570fa9bf868df44fecd4b58332ff24?bytes=b
@@ -139,6 +136,13 @@ class Index(Resource):
                     return self.fake_nodes2(request, json_formatted)
                 else:
                     return self.fake_error(request, url_path[0])
+            elif url_path[-1] == 'store' or url_path[-2] == 'store':
+                # /_all/_stats/store
+                # /_stats/store
+                # /_stats/store/?pretty&human&level=cluster
+                cluster = 'level=cluster' in collapsed_path
+                pretty = 'pretty' in collapsed_path
+                return self.fake_store(request, cluster, pretty)
             elif url_path[0] == '_plugin' and url_path[1].startswith('head'):
                 # /_plugin/head
                 return self.fake_plugins(request)
@@ -163,18 +167,23 @@ class Index(Resource):
                     return self.fake_error(request, url_path[0])
             else:
                 return self.fake_error(request, url_path[0])
-            # Not handled:
+            #  Not handled:
+            # /evox/about
             # /stalker_portal/c/
             # /streaming/clients_live.php
             # /streaming/QxAvEzlK.php
-            # These should return
-            # {"error": "Incorrect HTTP method for uri [{path}] and method [GET], allowed: [POST]","status": 405}
+            # /streaming/uo6jIDnf.php
+            #  These should return
+            #  {"error": "Incorrect HTTP method for uri [{path}] and method [GET], allowed: [POST]","status": 405}
         else:
             # /api.php
-            # /c
             # /client_area/
+            # /HNAP1
             # /index/_search?pretty=true&q=*:*
             # /login.php
+            # /Nmap/folder/check1592730162
+            # /nmaplowercheck1592730162
+            # /NmapUpperCheck1592730162
             # /nice%20ports,/Trinity.txt.bak
             # /robots.txt
             # /sitemap.xml
@@ -182,7 +191,14 @@ class Index(Resource):
             # /stat
             # /streaming
             # /system_api.php
+            # /4e5e5d7364f443e28fbf0d3ae744a59a
+            # /?c=4e5e5d7364f443e28fbf0d3ae744a59a
             return self.fake_error(request, url_path[0])
+            #  Not handled:
+            # /c
+            #  This should return:
+            #  {"error":{"root_cause":[{"type":"illegal_argument_exception","reason":"request [/] contains unrecognized parameter: [c]"}],
+            #  "type":"illegal_argument_exception","reason":"request [/] contains unrecognized parameter: [c]"},"status":400}
 
     def render_POST(self, request):
         path = unquote(decode(request.uri))
@@ -216,6 +232,7 @@ class Index(Resource):
         # /website/blog/
         # /info/info
         # /_sql?format=json
+        # /sdk
         # send empty response as we're now done
         return self.send_response(request)
 
