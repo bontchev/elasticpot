@@ -155,10 +155,22 @@ The honeypot automatically outputs event data as text to the file
 `log/honeypot.log`. Additional output plugins can be configured to record the
 data other ways. Supported output plugins include:
 
+- CouchDB
+- Elasticsearch
+- HPFeeds
+- InfluxDB
+- InfluxDB 2.0
 - JSON
+- syslog
+- MongoDB
 - MySQL
+- PostgreSQL
+- RedisDB
+- RethinkDB
+- SQLite3
+- text
 
-More plugins are likely to be added in the future.
+More plugins might be added in the future.
 
 See `docs/[Output Plugin]/README.md` for details.
 
