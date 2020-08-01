@@ -94,7 +94,7 @@ First create a database named `elasticpot` residing in the `data` directory and
 based on the schema `docs/sqlite3/sqlite3.sql`:
 
 ```bash
-sqlite3 ~/elasticpot/data/elasticpot.sql < docs/sqlite3/sqlite3.sql
+sqlite3 ~/elasticpot/data/elasticpot.db < docs/sqlite3/sqlite3.sql
 ```
 
 If you have opted on keeping the database elsewhere, use its proper path
