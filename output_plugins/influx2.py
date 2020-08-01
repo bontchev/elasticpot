@@ -19,8 +19,8 @@ class Output(output.Output):
         self.client = None
         try:
             self.client = InfluxDBClient(url=host, token=token)
-        except InfluxDBClientError as e:
-            log.msg("output_influx2: I/O error({}): '{}'".format(e.code, e.message))
+        except Exception as e:
+            log.msg("output_influx2: I/O error: '{}'".format(e))
             return
 
         if self.client is None:
@@ -29,7 +29,7 @@ class Output(output.Output):
 
         self.org = CONFIG.get('output_influx2', 'org')
         self.bucket = CONFIG.get('output_influx2', 'bucket', fallback='elasticpot')
-        self.write_api = client.write_api(write_options=SYNCHRONOUS)
+        self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
 
     def stop(self):
         pass

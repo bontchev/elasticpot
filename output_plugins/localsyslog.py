@@ -13,7 +13,7 @@ def formatCef(logentry):
     """
     # Jan 18 11:07:53 host CEF:Version|Device Vendor|Device Product|
     # Device Version|Signature ID|Name|Severity|[Extension]
-    cefVendor = 'Elasticpot'
+    cefVendor = 'Bontchev'
     cefProduct = 'Elasticpot'
     cefVersion = '1.0'
     cefSignature = logentry['eventid']
@@ -57,7 +57,7 @@ class Output(output.Output):
         self.format = CONFIG.get('output_localsyslog', 'format', fallback='text')
         facilityString = CONFIG.get('output_localsyslog', 'facility', fallback='USER')
         facility = vars(syslog)['LOG_' + facilityString]
-        self.syslog = twisted.python.syslog.SyslogObserver(prefix='elasticpot', facility=facility)
+        self.syslog = SyslogObserver(prefix='elasticpot', facility=facility)
 
     def stop(self):
         pass
