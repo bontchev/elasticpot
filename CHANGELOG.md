@@ -15,13 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Fixed a link in the file `README.md`
 * Changed the version number in the `Dockerfile`
+* Fixed a couple of bugs in the Influx 2.0 plugin
+* Fixed a typo in the change log (yes, again)
 
 ## [1.0.5]
 
 ### Added in version 1.0.5
 
 * PostgreSQL output plugin (with documentation)
-* Documentation for the SQLite3 output pllugin
+* Documentation for the SQLite3 output plugin
 * Handling some additional Elasticsearch queries
 
 ### Changed in version 1.0.5
