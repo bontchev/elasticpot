@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed a link in the file `README.md`
 * Changed the version number in the `Dockerfile`
 * Fixed a couple of bugs in the Influx 2.0 plugin
+* Improved the dependency for the PostgreSQL plugin
+* Fixed an error in the MySQL plugin's error handler
 * Fixed a typo in the change log (yes, again)
 
 ## [1.0.5]
