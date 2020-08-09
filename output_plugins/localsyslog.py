@@ -4,8 +4,6 @@ import syslog
 from core import output
 from core.config import CONFIG
 
-from twisted.python.syslog import SyslogObserver
-
 
 def formatCef(logentry):
     """
@@ -54,25 +52,12 @@ def formatCef(logentry):
 class Output(output.Output):
 
     def start(self):
-        self.format = CONFIG.get('output_localsyslog', 'format', fallback='text')
         facilityString = CONFIG.get('output_localsyslog', 'facility', fallback='USER')
         facility = vars(syslog)['LOG_' + facilityString]
-        self.syslog = SyslogObserver(prefix='elasticpot', facility=facility)
+        syslog.openlog(logoption=syslog.LOG_PID, facility=facility)
 
     def stop(self):
         pass
 
     def write(self, event):
-        if 'isError' not in event:
-            event['isError'] = False
-
-        if self.format == 'cef':
-            self.syslog.emit({
-                'message': formatCef(event),
-                'isError': False,
-                'system': 'elasticpot'
-            })
-        else:
-            # message appears with additional spaces if message key is defined
-            event['message'] = [event['message']]
-            self.syslog.emit(event)
+        syslog.syslog(syslog.LOG_INFO, formatCef(event))
