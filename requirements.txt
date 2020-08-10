@@ -28,6 +28,8 @@ pymongo
 # MySQL
 # If this fails, see the documentation docs/sql/README.md
 #  or try `sudo apt-get install libmysqlclient-dev`
+# On Windows, if the standard `pip install mysqlclient` fails,
+#  try `pip install --only-binary :all: mysqlclient`
 mysqlclient>=1.3.12
 
 # postgres

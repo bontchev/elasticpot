@@ -1,12 +1,11 @@
 
-import MySQLdb
-
 from core import output
 from core.config import CONFIG
 from core.tools import geolocate
 
 from hashlib import sha256
 from geoip2.database import Reader
+from _mysql_exceptions import Error, OperationalError
 
 from twisted.python import log
 from twisted.enterprise.adbapi import ConnectionPool
@@ -27,7 +26,7 @@ class ReconnectingConnectionPool(ConnectionPool):
         try:
             return ConnectionPool._runInteraction(
                 self, interaction, *args, **kw)
-        except MySQLdb._exceptions.OperationalError as e:
+        except OperationalError as e:
             if e.args[0] not in (2003, 2006, 2013):
                 raise e
             conn = self.connections.get(self.threadID())
@@ -66,7 +65,7 @@ class Output(output.Output):
                 cp_min=1,
                 cp_max=1
             )
-        except MySQLdb._exceptions.Error as e:
+        except Error as e:
             self.local_log('MySQL plugin: Error {}: {}'.format(e.args[0], e.args[1]))
 
         if self.geoip:
