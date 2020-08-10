@@ -1,11 +1,18 @@
 
+from hashlib import sha256
+from geoip2.database import Reader
+
+try:
+    from MySQLdb import Error, OperationalError
+except ImportError:
+    try:
+        from MySQLdb._exceptions import Error, OperationalError
+    except ImportError:
+        from _mysql_exceptions import Error, OperationalError
+
 from core import output
 from core.config import CONFIG
 from core.tools import geolocate
-
-from hashlib import sha256
-from geoip2.database import Reader
-from _mysql_exceptions import Error, OperationalError
 
 from twisted.python import log
 from twisted.enterprise.adbapi import ConnectionPool
