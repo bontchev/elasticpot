@@ -14,7 +14,7 @@ from twisted.python import log
 from twisted.web.server import Site
 from twisted.internet import reactor
 
-__VERSION__ = '1.0.6'
+__VERSION__ = '1.0.7'
 __description__ = 'Elasticsearch Honeypot'
 __license__ = 'GPL'
 __uri__ = 'https://gitlab.com/bontchev/elasticpot'
